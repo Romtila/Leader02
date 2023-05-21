@@ -15,5 +15,5 @@ public class ChatBotRequest
     public int DepartmentId { get; set; }
     public Department Department { get; set; } = new();
     
-    public List<ChatBotRequestMessage> ChatBotRequestMessages { get; set; } = new();
+    public List<ChatBotRequestMessage>? ChatBotRequestMessages { get; set; } = new();
 }

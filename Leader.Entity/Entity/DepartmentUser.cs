@@ -14,5 +14,5 @@ public class DepartmentUser
     public SubDepartment SubDepartment { get; set; } = new();
     public int SubDepartmentId { get; set; }
 
-    public List<Consultation> Consultations { get; set; } = new();
+    public List<Consultation>? Consultations { get; set; } = new();
 }

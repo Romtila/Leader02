@@ -19,8 +19,8 @@ public class User
     public string? DitSecurityAnswer { get; set; }
     public string Password { get; set; } = string.Empty;
 
-    public List<ChatBotRequest> ChatBotRequests { get; set; } = new();
-    public List<Consultation> Consultations { get; set; } = new();
+    public List<ChatBotRequest>? ChatBotRequests { get; set; } = new();
+    public List<Consultation>? Consultations { get; set; } = new();
 
     //public DateTime LastVisitDateTime { get; set; }
     //public DateTime CreatedDateTime { get; set; }
