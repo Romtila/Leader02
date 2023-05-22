@@ -69,37 +69,170 @@ public class RequirementParser
              
         for (var i = 3; i <= worksheet.Dimension.Rows; i++)
         {
-             basicRequirementDescription = "";//Описание базового требования (группы ОТ)	
-             basicRequirementDetail = "";//Детализация базового требования	
+            if (worksheet.Cells[i, 2].Value != null)
+            {
+                basicRequirementDescription = worksheet.Cells[i, 2].Value.ToString();
+                basicRequirementDetail = "";
              requirementType = RequirementType.Object;
-             indicationOfNpa = "";//Указание на НПА, ПА (наименование, структурные единицы, текст нормы)	
-             validityPeriodOfLegalAct = "";//Период действия НПА (c - по)	
-             validityPeriodOfRequirement = "";//Период действия ОТ (c - по)
+             indicationOfNpa = "";
+             validityPeriodOfLegalAct = "";
+             validityPeriodOfRequirement = "";
              verificationMethod = VerificationMethod.Mock;
+             confirmingComplianceDocuments = "";
+             ogv = "";
+             possibilityOfDocumentsObtaining = "";
+             supportingDocumentsValidity = "";
+             typeOfLiability = "";
+             subjectOfResponsibility = "";
+             sanction = "";
+             sizeOfSanction = "";
+             typeOfNorm = "";
+             referenceToLegalAct = "";
+             empoweredToHoldAuthority = "";
+             responsibilityBringingProcedure = "";
+             typesOfActivitiesOfSubjects = "";
+             clarificationOfTypeOdActivity = "";
+             characteristicForGeneralQuestion = "";
+             businessQuestionContentForProfilingForGeneralQuestion = "";
+             characteristicForClarifyingQuestion = "";
+             businessQuestionContentForProfilingForClarifyingQuestion = "";
+             continue;
+            }
 
-             confirmingComplianceDocuments = "";//Документы, подтверждающие  соответствие субъекта/объекта контроля ОТ (если применимо)	
-             ogv = "";//ОГВ (ОМСУ), организации, в распоряжении которых находятся необходимые сведения (уполномоченные на выдачу подтверждающих документов)	
-             possibilityOfDocumentsObtaining = "";//Возможность получения КНО необходимых подтверждающих документов/сведений по межведомственному взаимодействию (да/нет)	
-             supportingDocumentsValidity = "";//Срок действия подтверждающих документов (если применимо)
+            if (worksheet.Cells[i, 3].Value != null)
+            {
+                basicRequirementDetail = worksheet.Cells[i, 3].Value.ToString();
+            }
 
-             typeOfLiability = "";//Вид ответственности (уголовная /административная/ гражданско-правовая/иная ответственность)	
-             subjectOfResponsibility = "";//Субъект ответственности	
-             sanction = "";//Санкция	
-             sizeOfSanction = "";//Размер санкции	
-             typeOfNorm = "";//Вид нормы (общая, специальная) 	
-             referenceToLegalAct = "";//Указание на НПА (НПА, структурные единицы, текст нормы)	
-             empoweredToHoldAuthority = "";//Орган, уполномоченный на привлечение к ответственности	
-             responsibilityBringingProcedure = "";//Порядок привлечения к ответственности (ссылка на файл без авторизации)
+            if (worksheet.Cells[i, 4].Value != null)
+            {
+                requirementType = worksheet.Cells[i, 4].Value.ToString() == "1"
+                    ? RequirementType.Subject
+                    : RequirementType.Object;
+            }
 
-             typesOfActivitiesOfSubjects = "";//Виды деятельности субъектов контроля, на которые распространяется ОТ (по ОКВЭД 2)	
-             clarificationOfTypeOdActivity = "";//Уточнение вида деятельности (при необходимости)
+            if (worksheet.Cells[i, 5].Value != null)
+            {
+                indicationOfNpa = worksheet.Cells[i, 5].Value.ToString();
+            }
 
-             characteristicForGeneralQuestion = "";//Характеристика (для общего вопроса)	
-             businessQuestionContentForProfilingForGeneralQuestion = "";//Содержание вопроса бизнесу для профилирования (для общего вопроса)	
-             characteristicForClarifyingQuestion = "";//Характеристика (для уточняющего вопроса)	
-             businessQuestionContentForProfilingForClarifyingQuestion = "";//Содержание вопроса бизнесу для профилирования (для уточняющего вопроса)
+            if (worksheet.Cells[i, 6].Value != null)
+            {
+                validityPeriodOfLegalAct = worksheet.Cells[i, 6].Value.ToString();
+                validityPeriodOfRequirement = "";
+            }
+
+            if (worksheet.Cells[i, 7].Value != null)
+            {
+                validityPeriodOfRequirement = worksheet.Cells[i, 6].Value.ToString();
+            }
+
+            if (worksheet.Cells[i, 8].Value != null)
+            {
+                verificationMethod = worksheet.Cells[i, 8].Value.ToString() switch
+                {
+                    "1" => VerificationMethod.DocumentsConsideration
+                    , "2" => VerificationMethod.InspectionAndResearch
+                    , "3" => VerificationMethod.ProductsSampling
+                    , "4" => VerificationMethod.ResearchConducting
+                    , "5" => VerificationMethod.NetworksParametersMeasurement
+                    , "6" => VerificationMethod.ComplianceMonitoring
+                    , "7" => VerificationMethod.ControlPurchase
+                    , "8" => VerificationMethod.Other
+                    , _ => verificationMethod
+                };
+            }
+
+            if (worksheet.Cells[i, 9].Value != null)
+            {
+                confirmingComplianceDocuments = worksheet.Cells[i, 9].Value.ToString();
+            }
             
+            if (worksheet.Cells[i, 10].Value != null)
+            {
+                ogv = worksheet.Cells[i, 10].Value.ToString();
+            }
             
+            if (worksheet.Cells[i, 11].Value != null)
+            {
+                possibilityOfDocumentsObtaining = worksheet.Cells[i, 11].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 12].Value != null)
+            {
+                supportingDocumentsValidity = worksheet.Cells[i, 12].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 13].Value != null)
+            {
+                typeOfLiability = worksheet.Cells[i, 13].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 14].Value != null)
+            {
+                subjectOfResponsibility = worksheet.Cells[i, 14].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 15].Value != null)
+            {
+                sanction = worksheet.Cells[i, 15].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 16].Value != null)
+            {
+                sizeOfSanction = worksheet.Cells[i, 16].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 17].Value != null)
+            {
+                typeOfNorm = worksheet.Cells[i, 17].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 18].Value != null)
+            {
+                referenceToLegalAct = worksheet.Cells[i, 18].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 19].Value != null)
+            {
+                empoweredToHoldAuthority = worksheet.Cells[i, 19].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 20].Value != null)
+            {
+                responsibilityBringingProcedure = worksheet.Cells[i, 20].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 21].Value != null)
+            {
+                typesOfActivitiesOfSubjects = worksheet.Cells[i, 21].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 22].Value != null)
+            {
+                clarificationOfTypeOdActivity = worksheet.Cells[i, 22].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 23].Value != null)
+            {
+                characteristicForGeneralQuestion = worksheet.Cells[i, 23].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 24].Value != null)
+            {
+                businessQuestionContentForProfilingForGeneralQuestion = worksheet.Cells[i, 24].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 24].Value != null)
+            {
+                characteristicForClarifyingQuestion = worksheet.Cells[i, 24].Value.ToString();
+            }
+            
+            if (worksheet.Cells[i, 24].Value != null)
+            {
+                businessQuestionContentForProfilingForClarifyingQuestion = worksheet.Cells[i, 24].Value.ToString();
+            }
+
             var requirement = new Requirement
             {
                 Department = subDepartment?.Department,
