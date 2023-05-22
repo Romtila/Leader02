@@ -36,16 +36,14 @@ public class RequirementParser
         var worksheet = package.Workbook.Worksheets[0];
         
         var requirements = new List<Requirement>(worksheet.Dimension.Rows);
-
-        for (var i = 3; i <= worksheet.Dimension.Rows; i++)
-        {
-            var requirementType = RequirementType.Object;
-            var verificationMethod = VerificationMethod.Mock;
-            var basicRequirementDescription = "";//Описание базового требования (группы ОТ)	
+        
+        var basicRequirementDescription = "";//Описание базового требования (группы ОТ)	
             var basicRequirementDetail = "";//Детализация базового требования	
+            var requirementType = RequirementType.Object;
             var indicationOfNpa = "";//Указание на НПА, ПА (наименование, структурные единицы, текст нормы)	
             var validityPeriodOfLegalAct = "";//Период действия НПА (c - по)	
             var validityPeriodOfRequirement = "";//Период действия ОТ (c - по)
+            var verificationMethod = VerificationMethod.Mock;
 
             var confirmingComplianceDocuments = "";//Документы, подтверждающие  соответствие субъекта/объекта контроля ОТ (если применимо)	
             var ogv = "";//ОГВ (ОМСУ), организации, в распоряжении которых находятся необходимые сведения (уполномоченные на выдачу подтверждающих документов)	
@@ -68,6 +66,39 @@ public class RequirementParser
             var businessQuestionContentForProfilingForGeneralQuestion = "";//Содержание вопроса бизнесу для профилирования (для общего вопроса)	
             var characteristicForClarifyingQuestion = "";//Характеристика (для уточняющего вопроса)	
             var businessQuestionContentForProfilingForClarifyingQuestion = "";//Содержание вопроса бизнесу для профилирования (для уточняющего вопроса)
+             
+        for (var i = 3; i <= worksheet.Dimension.Rows; i++)
+        {
+             basicRequirementDescription = "";//Описание базового требования (группы ОТ)	
+             basicRequirementDetail = "";//Детализация базового требования	
+             requirementType = RequirementType.Object;
+             indicationOfNpa = "";//Указание на НПА, ПА (наименование, структурные единицы, текст нормы)	
+             validityPeriodOfLegalAct = "";//Период действия НПА (c - по)	
+             validityPeriodOfRequirement = "";//Период действия ОТ (c - по)
+             verificationMethod = VerificationMethod.Mock;
+
+             confirmingComplianceDocuments = "";//Документы, подтверждающие  соответствие субъекта/объекта контроля ОТ (если применимо)	
+             ogv = "";//ОГВ (ОМСУ), организации, в распоряжении которых находятся необходимые сведения (уполномоченные на выдачу подтверждающих документов)	
+             possibilityOfDocumentsObtaining = "";//Возможность получения КНО необходимых подтверждающих документов/сведений по межведомственному взаимодействию (да/нет)	
+             supportingDocumentsValidity = "";//Срок действия подтверждающих документов (если применимо)
+
+             typeOfLiability = "";//Вид ответственности (уголовная /административная/ гражданско-правовая/иная ответственность)	
+             subjectOfResponsibility = "";//Субъект ответственности	
+             sanction = "";//Санкция	
+             sizeOfSanction = "";//Размер санкции	
+             typeOfNorm = "";//Вид нормы (общая, специальная) 	
+             referenceToLegalAct = "";//Указание на НПА (НПА, структурные единицы, текст нормы)	
+             empoweredToHoldAuthority = "";//Орган, уполномоченный на привлечение к ответственности	
+             responsibilityBringingProcedure = "";//Порядок привлечения к ответственности (ссылка на файл без авторизации)
+
+             typesOfActivitiesOfSubjects = "";//Виды деятельности субъектов контроля, на которые распространяется ОТ (по ОКВЭД 2)	
+             clarificationOfTypeOdActivity = "";//Уточнение вида деятельности (при необходимости)
+
+             characteristicForGeneralQuestion = "";//Характеристика (для общего вопроса)	
+             businessQuestionContentForProfilingForGeneralQuestion = "";//Содержание вопроса бизнесу для профилирования (для общего вопроса)	
+             characteristicForClarifyingQuestion = "";//Характеристика (для уточняющего вопроса)	
+             businessQuestionContentForProfilingForClarifyingQuestion = "";//Содержание вопроса бизнесу для профилирования (для уточняющего вопроса)
+            
             
             var requirement = new Requirement
             {
