@@ -26,7 +26,11 @@ public class Leader02Context : DbContext
         modelBuilder.ApplyConfiguration(new ChatBotRequestConfiguration());
         modelBuilder.ApplyConfiguration(new ChatBotRequestMessageConfiguration());
 
+        modelBuilder.DateTimeWithoutTimeZoneConfigure();
+
         base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.HasPostgresExtension("fuzzystrmatch");
     }
 
     public DbSet<AdminUser> AdminUsers { get; set; }

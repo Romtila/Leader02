@@ -1,6 +1,7 @@
 using System.Globalization;
 using Leader.Domain.Entity;
 using Leader02.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
 namespace Leader02.DataSetsParser.Parsers;
@@ -16,7 +17,7 @@ public class LegalActParser
 
     public void LegalActParsing(string fileName)
     {
-        var subDepartments = _context.SubDepartments.ToList();
+        var subDepartments = _context.SubDepartments.Include(x => x.Department).ToList();
 
         var existingFile = new FileInfo(fileName);
 
@@ -26,27 +27,33 @@ public class LegalActParser
         var worksheet = package.Workbook.Worksheets[0];
         for (var i = 3; i < worksheet.Dimension.Rows; i++)
         {
-            DateTime.TryParseExact(worksheet.Cells[i, 6].Value.ToString().Replace(".", string.Empty).Substring(0, 8), 
+            DateTime.TryParseExact(worksheet.Cells[i, 6].Value.ToString().Replace(".", string.Empty)[..8],
                 "ddMMyyyy", CultureInfo.GetCultureInfo("ru-RU"), DateTimeStyles.None, out var documentDate);
-            DateTime.TryParseExact(worksheet.Cells[i, 7].Value.ToString().Replace(".", string.Empty).Substring(0, 8), 
+            DateTime.TryParseExact(worksheet.Cells[i, 7].Value.ToString().Replace(".", string.Empty)[..8],
                 "ddMMyyyy", CultureInfo.GetCultureInfo("ru-RU"), DateTimeStyles.None, out var publishDate);
 
+            var name = worksheet.Cells[i, 2].Value.ToString() ?? "";
+            var legalActType = "";
+            if(worksheet.Cells[i, 5].Value != null)
+                legalActType = worksheet.Cells[i, 5].Value.ToString() ?? "";
+            
             var legalAct = new LegalAct
             {
-                Name = worksheet.Cells[i, 1].Value.ToString() ?? "", 
+                Name = name, 
                 DocumentDate = documentDate, 
                 PublishDate = publishDate, 
-                LegalActType = worksheet.Cells[i, 5].Value.ToString() ?? "", 
+                LegalActType = legalActType, 
                 LegalActUrl = "",
             };
 
             if (worksheet.Cells[i, 4].Value != null)
             {
                 var searchingDepartment = worksheet.Cells[i, 4].Value.ToString().ToLower().TrimEnd(' ');
-                var subDepartment = subDepartments.FirstOrDefault(x => 
+                var subDepartment = subDepartments.FirstOrDefault(x =>
                     x.Name.ToLower().Contains(searchingDepartment) ||
-                    x.Name.ToLower() == searchingDepartment);
-                
+                    x.Name.ToLower() == searchingDepartment ||
+                    searchingDepartment.Contains(x.Name.ToLower()));
+
                 if (subDepartment != null)
                 {
                     legalAct.SubDepartment = subDepartment;
@@ -58,10 +65,10 @@ public class LegalActParser
             {
                 var searchingDepartment = worksheet.Cells[i, 3].Value.ToString().ToLower().TrimEnd(' ');
                 var department = subDepartments.FirstOrDefault(x => x.Department != null && (
-                        x.Department.Name.ToLower().Contains(searchingDepartment) ||
-                        x.Department.Name.ToLower() == searchingDepartment ||
-                        x.Department.Abbreviation.ToLower().Contains(searchingDepartment) ||
-                        x.Department.Abbreviation.ToLower() == searchingDepartment));
+                    x.Department.Name.ToLower().Contains(searchingDepartment) ||
+                    x.Department.Name.ToLower() == searchingDepartment ||
+                    x.Department.Abbreviation.ToLower().Contains(searchingDepartment) ||
+                    x.Department.Abbreviation.ToLower() == searchingDepartment));
                 if (department != null)
                 {
                     legalAct.Department = department.Department;

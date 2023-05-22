@@ -12,7 +12,7 @@ public class DepartmentUser
     public string Password { get; set; } = string.Empty;
 
     public int? SubDepartmentId { get; set; }
-    public SubDepartment? SubDepartment { get; set; } = new();
+    public SubDepartment? SubDepartment { get; set; }
 
     public List<Consultation>? Consultations { get; set; }
 }

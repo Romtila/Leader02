@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Leader02.Infrastructure.Migrations
 {
     [DbContext(typeof(Leader02Context))]
-    [Migration("20230522095835_Initial")]
+    [Migration("20230522155429_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -23,6 +23,7 @@ namespace Leader02.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "fuzzystrmatch");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Leader.Domain.Entity.AdminUser", b =>
@@ -56,7 +57,7 @@ namespace Leader02.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("integer");
@@ -118,13 +119,13 @@ namespace Leader02.Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("FinishDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("OtherInformation")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("StarDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Topic")
                         .HasColumnType("text");
@@ -156,7 +157,7 @@ namespace Leader02.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("SlotDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("SlotTime")
                         .IsRequired()
@@ -275,11 +276,11 @@ namespace Leader02.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("DocumentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LegalActType")
                         .IsRequired()
@@ -293,9 +294,9 @@ namespace Leader02.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("PublishDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("SubDepartmentId")
+                    b.Property<int?>("SubDepartmentId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -396,6 +397,9 @@ namespace Leader02.Infrastructure.Migrations
                     b.Property<string>("SizeOfSanction")
                         .HasColumnType("text");
 
+                    b.Property<int?>("SubDepartmentId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("SubjectOfResponsibility")
                         .HasColumnType("text");
 
@@ -423,6 +427,8 @@ namespace Leader02.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("SubDepartmentId");
 
                     b.ToTable("Requirements");
                 });
@@ -588,15 +594,11 @@ namespace Leader02.Infrastructure.Migrations
                 {
                     b.HasOne("Leader.Domain.Entity.Department", "Department")
                         .WithMany("LegalActs")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.HasOne("Leader.Domain.Entity.SubDepartment", "SubDepartment")
                         .WithMany("LegalActs")
-                        .HasForeignKey("SubDepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SubDepartmentId");
 
                     b.Navigation("Department");
 
@@ -609,7 +611,13 @@ namespace Leader02.Infrastructure.Migrations
                         .WithMany("Requirements")
                         .HasForeignKey("DepartmentId");
 
+                    b.HasOne("Leader.Domain.Entity.SubDepartment", "SubDepartment")
+                        .WithMany("Requirements")
+                        .HasForeignKey("SubDepartmentId");
+
                     b.Navigation("Department");
+
+                    b.Navigation("SubDepartment");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>
@@ -651,6 +659,8 @@ namespace Leader02.Infrastructure.Migrations
                     b.Navigation("DepartmentUsers");
 
                     b.Navigation("LegalActs");
+
+                    b.Navigation("Requirements");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.User", b =>

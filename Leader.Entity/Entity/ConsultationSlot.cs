@@ -11,5 +11,5 @@ public class ConsultationSlot
     public string? OtherInformation { get; set; }
     
     public int? SubDepartmentId { get; set; }
-    public SubDepartment? SubDepartment { get; set; } = new();
+    public SubDepartment? SubDepartment { get; set; }
 }

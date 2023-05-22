@@ -10,10 +10,10 @@ public class ChatBotRequest
     public string? FeedBackString { get; set; }
 
     public long? UserId { get; set; }
-    public User? User { get; set; } = new();
+    public User? User { get; set; }
 
     public int? DepartmentId { get; set; }
-    public Department? Department { get; set; } = new();
+    public Department? Department { get; set; }
     
     public List<ChatBotRequestMessage>? ChatBotRequestMessages { get; set; }
 }

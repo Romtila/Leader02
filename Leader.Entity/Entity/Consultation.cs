@@ -10,11 +10,11 @@ public class Consultation
     public string? OtherInformation { get; set; }
 
     public long? UserId { get; set; }
-    public User? User { get; set; } = new();
+    public User? User { get; set; }
 
     public long? DepartmentUserId { get; set; }
-    public DepartmentUser? DepartmentUser { get; set; } = new();
+    public DepartmentUser? DepartmentUser { get; set; }
 
     public int? ConsultationSlotId { get; set; }
-    public ConsultationSlot? ConsultationSlot { get; set; } = new();
+    public ConsultationSlot? ConsultationSlot { get; set; }
 }

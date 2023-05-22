@@ -7,7 +7,10 @@ public class Requirement
     public int Id { get; set; }
 
     public int? DepartmentId { get; set; }
-    public Department? Department { get; set; } = new();
+    public Department? Department { get; set; }
+    
+    public int? SubDepartmentId { get; set; }
+    public SubDepartment? SubDepartment { get; set; }
     
     public string? BasicRequirementDescription { get; set; }//Описание базового требования (группы ОТ)	
     public string? BasicRequirementDetail { get; set; }//Детализация базового требования	

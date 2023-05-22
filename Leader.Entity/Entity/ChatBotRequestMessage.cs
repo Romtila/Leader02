@@ -7,5 +7,5 @@ public class ChatBotRequestMessage
     public int State { get; set; }
     
     public Guid? ChatBotRequestId { get; set; }
-    public ChatBotRequest? ChatBotRequest { get; set; } = new();
+    public ChatBotRequest? ChatBotRequest { get; set; }
 }
