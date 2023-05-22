@@ -9,11 +9,11 @@ public class ChatBotRequest
     public ChatBotRequestFeedBack? FeedBack { get; set; }
     public string? FeedBackString { get; set; }
 
-    public long UserId { get; set; }
-    public User User { get; set; } = new();
+    public long? UserId { get; set; }
+    public User? User { get; set; } = new();
 
-    public int DepartmentId { get; set; }
-    public Department Department { get; set; } = new();
+    public int? DepartmentId { get; set; }
+    public Department? Department { get; set; } = new();
     
-    public List<ChatBotRequestMessage>? ChatBotRequestMessages { get; set; } = new();
+    public List<ChatBotRequestMessage>? ChatBotRequestMessages { get; set; }
 }

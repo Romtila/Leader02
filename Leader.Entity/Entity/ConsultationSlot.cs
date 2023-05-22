@@ -10,6 +10,6 @@ public class ConsultationSlot
     public ConsultationSlotStatus Status { get; set; }
     public string? OtherInformation { get; set; }
     
-    public int SubDepartmentId { get; set; }
-    public SubDepartment SubDepartment { get; set; } = new();
+    public int? SubDepartmentId { get; set; }
+    public SubDepartment? SubDepartment { get; set; } = new();
 }

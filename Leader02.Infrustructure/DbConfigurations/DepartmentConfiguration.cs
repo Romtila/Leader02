@@ -17,5 +17,9 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         builder.HasMany(x => x.ChatBotRequests)
             .WithOne(x => x.Department)
             .HasForeignKey(x => x.DepartmentId);
+
+        builder.HasMany(x => x.LegalActs)
+            .WithOne(x => x.Department)
+            .HasForeignKey(x => x.DepartmentId);
     }
 }

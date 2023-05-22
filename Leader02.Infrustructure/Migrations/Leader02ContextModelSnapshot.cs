@@ -55,16 +55,21 @@ namespace Leader02.Infrastructure.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("FeedBack")
                         .HasColumnType("integer");
 
                     b.Property<string>("FeedBackString")
                         .HasColumnType("text");
 
-                    b.Property<long>("UserId")
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("UserId");
 
@@ -77,7 +82,7 @@ namespace Leader02.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ChatBotRequestId")
+                    b.Property<Guid?>("ChatBotRequestId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Message")
@@ -100,13 +105,13 @@ namespace Leader02.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ConsultationSlotId")
+                    b.Property<int?>("ConsultationSlotId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("ConsultationSlotId1")
+                    b.Property<Guid?>("ConsultationSlotId1")
                         .HasColumnType("uuid");
 
-                    b.Property<long>("DepartmentUserId")
+                    b.Property<long?>("DepartmentUserId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("FinishDateTime")
@@ -121,7 +126,7 @@ namespace Leader02.Infrastructure.Migrations
                     b.Property<string>("Topic")
                         .HasColumnType("text");
 
-                    b.Property<long>("UserId")
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("VideoRecordPath")
@@ -157,7 +162,7 @@ namespace Leader02.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<int>("SubDepartmentId")
+                    b.Property<int?>("SubDepartmentId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -165,6 +170,28 @@ namespace Leader02.Infrastructure.Migrations
                     b.HasIndex("SubDepartmentId");
 
                     b.ToTable("ConsultationSlots");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.ConsultationTopic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("SubDepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Topic")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubDepartmentId");
+
+                    b.ToTable("ConsultationTopics");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.Department", b =>
@@ -227,7 +254,7 @@ namespace Leader02.Infrastructure.Migrations
                     b.Property<string>("StationaryPhone")
                         .HasColumnType("text");
 
-                    b.Property<int>("SubDepartmentId")
+                    b.Property<int?>("SubDepartmentId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -235,6 +262,166 @@ namespace Leader02.Infrastructure.Migrations
                     b.HasIndex("SubDepartmentId");
 
                     b.ToTable("DepartmentUsers");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.LegalAct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("DocumentDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LegalActType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LegalActUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("PublishDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("SubDepartmentId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("SubDepartmentId");
+
+                    b.ToTable("LegalActs");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.OpenControlService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("OpenControlServiceUrl")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OpenControlServices");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.Requirement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BasicRequirementDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BasicRequirementDetail")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BusinessQuestionContentForProfilingForClarifyingQuestion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BusinessQuestionContentForProfilingForGeneralQuestion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CharacteristicForClarifyingQuestion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CharacteristicForGeneralQuestion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClarificationOfTypeOdActivity")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConfirmingComplianceDocuments")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EmpoweredToHoldAuthority")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IndicationOfNpa")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Ogv")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PossibilityOfDocumentsObtaining")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReferenceToLegalAct")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("RequirementType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ResponsibilityBringingProcedure")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Sanction")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SizeOfSanction")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SubjectOfResponsibility")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SupportingDocumentsValidity")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TypeOfLiability")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TypeOfNorm")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TypesOfActivitiesOfSubjects")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ValidityPeriodOfLegalAct")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ValidityPeriodOfRequirement")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("VerificationMethod")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Requirements");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>
@@ -245,7 +432,7 @@ namespace Leader02.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -324,11 +511,15 @@ namespace Leader02.Infrastructure.Migrations
 
             modelBuilder.Entity("Leader.Domain.Entity.ChatBotRequest", b =>
                 {
+                    b.HasOne("Leader.Domain.Entity.Department", "Department")
+                        .WithMany("ChatBotRequests")
+                        .HasForeignKey("DepartmentId");
+
                     b.HasOne("Leader.Domain.Entity.User", "User")
                         .WithMany("ChatBotRequests")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Department");
 
                     b.Navigation("User");
                 });
@@ -337,9 +528,7 @@ namespace Leader02.Infrastructure.Migrations
                 {
                     b.HasOne("Leader.Domain.Entity.ChatBotRequest", "ChatBotRequest")
                         .WithMany("ChatBotRequestMessages")
-                        .HasForeignKey("ChatBotRequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChatBotRequestId");
 
                     b.Navigation("ChatBotRequest");
                 });
@@ -348,21 +537,15 @@ namespace Leader02.Infrastructure.Migrations
                 {
                     b.HasOne("Leader.Domain.Entity.ConsultationSlot", "ConsultationSlot")
                         .WithMany()
-                        .HasForeignKey("ConsultationSlotId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ConsultationSlotId1");
 
                     b.HasOne("Leader.Domain.Entity.DepartmentUser", "DepartmentUser")
                         .WithMany("Consultations")
-                        .HasForeignKey("DepartmentUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentUserId");
 
                     b.HasOne("Leader.Domain.Entity.User", "User")
                         .WithMany("Consultations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("ConsultationSlot");
 
@@ -375,9 +558,16 @@ namespace Leader02.Infrastructure.Migrations
                 {
                     b.HasOne("Leader.Domain.Entity.SubDepartment", "SubDepartment")
                         .WithMany("ConsultationSlots")
-                        .HasForeignKey("SubDepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SubDepartmentId");
+
+                    b.Navigation("SubDepartment");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.ConsultationTopic", b =>
+                {
+                    b.HasOne("Leader.Domain.Entity.SubDepartment", "SubDepartment")
+                        .WithMany("ConsultationTopics")
+                        .HasForeignKey("SubDepartmentId");
 
                     b.Navigation("SubDepartment");
                 });
@@ -386,20 +576,44 @@ namespace Leader02.Infrastructure.Migrations
                 {
                     b.HasOne("Leader.Domain.Entity.SubDepartment", "SubDepartment")
                         .WithMany("DepartmentUsers")
+                        .HasForeignKey("SubDepartmentId");
+
+                    b.Navigation("SubDepartment");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.LegalAct", b =>
+                {
+                    b.HasOne("Leader.Domain.Entity.Department", "Department")
+                        .WithMany("LegalActs")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Leader.Domain.Entity.SubDepartment", "SubDepartment")
+                        .WithMany("LegalActs")
                         .HasForeignKey("SubDepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Department");
+
                     b.Navigation("SubDepartment");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.Requirement", b =>
+                {
+                    b.HasOne("Leader.Domain.Entity.Department", "Department")
+                        .WithMany("Requirements")
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>
                 {
                     b.HasOne("Leader.Domain.Entity.Department", "Department")
                         .WithMany("SubDepartments")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
                 });
@@ -411,6 +625,12 @@ namespace Leader02.Infrastructure.Migrations
 
             modelBuilder.Entity("Leader.Domain.Entity.Department", b =>
                 {
+                    b.Navigation("ChatBotRequests");
+
+                    b.Navigation("LegalActs");
+
+                    b.Navigation("Requirements");
+
                     b.Navigation("SubDepartments");
                 });
 
@@ -423,7 +643,11 @@ namespace Leader02.Infrastructure.Migrations
                 {
                     b.Navigation("ConsultationSlots");
 
+                    b.Navigation("ConsultationTopics");
+
                     b.Navigation("DepartmentUsers");
+
+                    b.Navigation("LegalActs");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.User", b =>

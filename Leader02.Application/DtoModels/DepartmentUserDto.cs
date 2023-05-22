@@ -1,6 +1,6 @@
-namespace Leader.Domain.Entity;
+namespace Leader02.Application.DtoModels;
 
-public class DepartmentUser
+public class DepartmentUserDto
 {
     public long Id { get; set; }
     public string LastName { get; set; } = string.Empty;
@@ -10,9 +10,5 @@ public class DepartmentUser
     public string? MobilePhone { get; set; }
     public string? StationaryPhone { get; set; }
     public string Password { get; set; } = string.Empty;
-
-    public int? SubDepartmentId { get; set; }
-    public SubDepartment? SubDepartment { get; set; } = new();
-
-    public List<Consultation>? Consultations { get; set; }
+    public SubDepartmentDto? SubDepartment { get; set; } = new();
 }

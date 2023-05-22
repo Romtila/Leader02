@@ -17,5 +17,13 @@ public class SubDepartmentConfiguration : IEntityTypeConfiguration<SubDepartment
         builder.HasMany(x => x.ConsultationSlots)
             .WithOne(x => x.SubDepartment)
             .HasForeignKey(x => x.SubDepartmentId);
+
+        builder.HasMany(x => x.ConsultationTopics)
+            .WithOne(x => x.SubDepartment)
+            .HasForeignKey(x => x.SubDepartmentId);
+
+        builder.HasMany(x => x.LegalActs)
+            .WithOne(x => x.SubDepartment)
+            .HasForeignKey(x => x.SubDepartmentId);
     }
 }

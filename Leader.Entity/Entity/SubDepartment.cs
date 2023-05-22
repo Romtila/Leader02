@@ -7,10 +7,11 @@ public class SubDepartment
     public string? SubDepartmentUrl { get; set; }
     public string? SubDepartmentDescription { get; set; }
     
-    public int DepartmentId { get; set; }
-    public Department Department { get; set; } = new();
+    public int? DepartmentId { get; set; }
+    public Department? Department { get; set; } = new();
     
-    public List<DepartmentUser>? DepartmentUsers { get; set; } = new();
-    public List<ConsultationSlot>? ConsultationSlots { get; set; } = new();
-    public List<ConsultationTopic>? ConsultationTopics { get; set; } = new();
+    public List<DepartmentUser>? DepartmentUsers { get; set; }
+    public List<ConsultationSlot>? ConsultationSlots { get; set; }
+    public List<ConsultationTopic>? ConsultationTopics { get; set; }
+    public List<LegalAct>? LegalActs { get; set; }
 }

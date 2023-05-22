@@ -8,6 +8,8 @@ public class Department
     public string? DepartmentUrl { get; set; }
     public string? Description { get; set; }
 
-    public List<SubDepartment>? SubDepartments { get; set; } = new();
-    public List<ChatBotRequest>? ChatBotRequests { get; set; } = new();
+    public List<SubDepartment>? SubDepartments { get; set; }
+    public List<ChatBotRequest>? ChatBotRequests { get; set; }
+    public List<Requirement>? Requirements { get; set; }
+    public List<LegalAct>? LegalActs { get; set; }
 }
