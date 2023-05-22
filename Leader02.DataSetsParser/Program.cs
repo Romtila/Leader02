@@ -3,6 +3,8 @@ using Leader02.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
+string[] fileArray = Directory.GetFiles(@"c:\Users\Romtila\Desktop\Датасеты\Приложение_1_Список_обязательных_требований_КНО_Москвы\", "*.*", SearchOption.AllDirectories);
+
 var builder = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false);
