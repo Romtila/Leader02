@@ -4,9 +4,11 @@ namespace Leader02.Application.DtoModels;
 
 public class RequirementDto
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
+    public int Number { get; set; }
     
     public DepartmentDto? DepartmentDto { get; set; }
+    public SubDepartmentDto? SubDepartmentDto { get; set; }
     
     public string? BasicRequirementDescription { get; set; }//Описание базового требования (группы ОТ)	
     public string? BasicRequirementDetail { get; set; }//Детализация базового требования	

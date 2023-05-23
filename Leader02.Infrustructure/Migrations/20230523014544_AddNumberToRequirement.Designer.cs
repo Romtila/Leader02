@@ -3,6 +3,7 @@ using System;
 using Leader02.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Leader02.Infrastructure.Migrations
 {
     [DbContext(typeof(Leader02Context))]
-    partial class Leader02ContextModelSnapshot : ModelSnapshot
+    [Migration("20230523014544_AddNumberToRequirement")]
+    partial class AddNumberToRequirement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

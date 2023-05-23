@@ -4,7 +4,8 @@ namespace Leader.Domain.Entity;
 
 public class Requirement
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
+    public int Number { get; set; }
 
     public int? DepartmentId { get; set; }
     public Department? Department { get; set; }

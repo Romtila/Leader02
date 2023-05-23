@@ -3,7 +3,7 @@ using Leader02.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-string[] fileArray = Directory.GetFiles(@"c:\Users\Romtila\Desktop\Датасеты\Приложение_1_Список_обязательных_требований_КНО_Москвы\", "*.*", SearchOption.AllDirectories);
+//string[] fileArray = Directory.GetFiles(@"c:\Users\Romtila\Desktop\Датасеты\Приложение_1_Список_обязательных_требований_КНО_Москвы\", "*.*", SearchOption.AllDirectories);
 
 var builder = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -30,5 +30,7 @@ var leader02Context = new Leader02Context(optionsBuilder.Options);
 //openControlServiceParser.OpenControlServiceParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_4_Перечень_сервисов_ГИС_Открытый_контроль.xlsx");
 
 //парсинг требований
+//var requirementParser = new RequirementParser(leader02Context);
+//requirementParser.RequirementParsing();
 
 Console.WriteLine($"The answer is always {connectionString}");
