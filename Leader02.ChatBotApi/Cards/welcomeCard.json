@@ -4,16 +4,11 @@
   "version": "1.0",
   "body": [
     {
-      "type": "Image",
-      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtB3AwMUeNoq4gUBGe6Ocj8kyh3bXa9ZbV7u1fVKQoyKFHdkqU",
-      "size": "stretch"
-    },
-    {
       "type": "TextBlock",
       "spacing": "medium",
       "size": "default",
       "weight": "bolder",
-      "text": "Welcome to Bot Framework!",
+      "text": "Здравствуйте, вас приветсвует помощник Открытый контроль",
       "wrap": true,
       "maxLines": 0
     },
@@ -21,26 +16,33 @@
       "type": "TextBlock",
       "size": "default",
       "isSubtle": true,
-      "text": "Now that you have successfully run your bot, follow the links in this Adaptive Card to expand your knowledge of Bot Framework.",
+      "text": "Органы контроля {ссылка}",
       "wrap": true,
       "maxLines": 0
-    }
-  ],
-  "actions": [
-    {
-      "type": "Action.OpenUrl",
-      "title": "Get an overview",
-      "url": "https://docs.microsoft.com/en-us/azure/bot-service/?view=azure-bot-service-4.0"
     },
     {
-      "type": "Action.OpenUrl",
-      "title": "Ask a question",
-      "url": "https://stackoverflow.com/questions/tagged/botframework"
+      "type": "TextBlock",
+      "size": "default",
+      "isSubtle": true,
+      "text": "Нормативные акты {ссылка}",
+      "wrap": true,
+      "maxLines": 0
     },
     {
-      "type": "Action.OpenUrl",
-      "title": "Learn how to deploy",
-      "url": "https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-deploy-azure?view=azure-bot-service-4.0"
+      "type": "TextBlock",
+      "size": "default",
+      "isSubtle": true,
+      "text": "Обязательные требования {ссылка}",
+      "wrap": true,
+      "maxLines": 0
+    },
+    {
+      "type": "TextBlock",
+      "size": "default",
+      "isSubtle": true,
+      "text": "Запись на прием (консультация) {ссылка}",
+      "wrap": true,
+      "maxLines": 0
     }
   ]
 }

@@ -3,9 +3,11 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.18.1
 
+using Leader.Domain.Interfaces;
 using Leader02.ChatBotApi.Bots;
 using Leader02.ChatBotApi.Dialogs;
 using Leader02.Infrastructure;
+using Leader02.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder;
@@ -29,6 +31,10 @@ public class Startup
 
         services.AddDbContext<Leader02Context>(options =>
             options.UseNpgsql("Host=localhost;Port=5432;Database=Leader02;Username=postgres;Password=admin"));
+
+        services.AddScoped<IRequirementRepository, RequirementRepository>();
+        services.AddScoped<ILegalActRepository, LegalActRepository>();
+        services.AddScoped<ISubDepartmentRepository, SubDepartmentRepository>();
         
         // Create the Bot Framework Authentication to be used with the Bot Adapter.
         services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>();
@@ -50,6 +56,10 @@ public class Startup
 
         // Register the BookingDialog.
         services.AddSingleton<BookingDialog>();
+        
+        services.AddSingleton<ConsultationDialog>();
+        services.AddSingleton<FeedBackDialog>();
+        services.AddSingleton<RepeatQuestionDialog>();
 
         // The MainDialog that will be run by the bot.
         services.AddSingleton<MainDialog>();
