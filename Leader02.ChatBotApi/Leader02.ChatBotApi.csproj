@@ -28,7 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Leader02.Application\Leader02.Application.csproj" />
     <ProjectReference Include="..\Leader02.Infrustructure\Leader02.Infrustructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="CognitiveModels\FlightBooking.json" />
   </ItemGroup>
 
 </Project>

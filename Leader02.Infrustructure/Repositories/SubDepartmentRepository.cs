@@ -8,4 +8,24 @@ public class SubDepartmentRepository : BaseRepository<SubDepartment>, ISubDepart
     public SubDepartmentRepository(Leader02Context dbContext) : base(dbContext)
     {
     }
+
+    public Task<SubDepartment> GetById(int id, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<SubDepartment>> GetByDepartmentId(int id, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<(int, string)>> GetAllName(string name, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<(int, string)>> GetAllDescription(string description, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,29 +1,20 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Leader.Domain.Interfaces;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Leader02.ChatBotApi.Dialogs;
 
 public class FeedBackDialog : CancelAndHelpDialog
 {
-    private readonly IRequirementRepository _requirementRepository;
-    private readonly ILegalActRepository _legalActRepository;
-    private readonly ISubDepartmentRepository _subDepartmentRepository;
     private readonly ILogger _logger;
 
-    public FeedBackDialog(ConsultationDialog consultationDialog, RepeatQuestionDialog repeatQuestionDialog,
-        IServiceScopeFactory serviceScopeFactory, ILogger<FeedBackDialog> logger)
+    public FeedBackDialog(ConsultationDialog consultationDialog, RepeatQuestionDialog repeatQuestionDialog, ILogger<FeedBackDialog> logger)
         : base(nameof(FeedBackDialog))
     {
         _logger = logger;
-        _requirementRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IRequirementRepository>();
-        _legalActRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ILegalActRepository>();
-        _subDepartmentRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ISubDepartmentRepository>();
 
         AddDialog(new TextPrompt(nameof(TextPrompt)));
         AddDialog(consultationDialog);

@@ -3,38 +3,32 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.18.1
 
-using Leader02.ChatBotApi.CognitiveModels;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Leader.Domain.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
+using Leader02.Application.IServices;
 
 namespace Leader02.ChatBotApi.Dialogs;
 
 public class MainDialog : ComponentDialog
 {
-    private readonly IRequirementRepository _requirementRepository;
-    private readonly ILegalActRepository _legalActRepository;
-    private readonly ISubDepartmentRepository _subDepartmentRepository;
+    private readonly IRequirementService _requirementService;
+    private readonly ILegalActService _legalActService;
+    private readonly ISubDepartmentService _subDepartmentService;
     private readonly ILogger _logger;
 
     // Dependency injection uses this constructor to instantiate MainDialog
     public MainDialog(FeedBackDialog feedBackDialog, ConsultationDialog consultationDialog, RepeatQuestionDialog repeatQuestionDialog,
-        ILogger<MainDialog> logger, IServiceScopeFactory serviceScopeFactory)
+        ILogger<MainDialog> logger, IRequirementService requirementService, ILegalActService legalActService, ISubDepartmentService subDepartmentService)
         : base(nameof(MainDialog))
     {
         _logger = logger;
-        _requirementRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IRequirementRepository>();
-        _legalActRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ILegalActRepository>();
-        _subDepartmentRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ISubDepartmentRepository>();
+        _requirementService = requirementService;
+        _legalActService = legalActService;
+        _subDepartmentService = subDepartmentService;
 
         AddDialog(new TextPrompt(nameof(TextPrompt)));
         AddDialog(feedBackDialog);
@@ -50,33 +44,6 @@ public class MainDialog : ComponentDialog
 
         // The initial child Dialog to run.
         InitialDialogId = nameof(WaterfallDialog);
-    }
-
-    // Shows a warning if the requested From or To cities are recognized as entities but they are not in the Airport entity list.
-    // In some cases LUIS will recognize the From and To composite entities as a valid cities but the From and To Airport values
-    // will be empty if those entity values can't be mapped to a canonical item in the Airport.
-    private static async Task ShowWarningForUnsupportedCities(ITurnContext context, FlightBooking luisResult, CancellationToken cancellationToken)
-    {
-        var unsupportedCities = new List<string>();
-
-        var fromEntities = luisResult.FromEntities;
-        if (!string.IsNullOrEmpty(fromEntities.From) && string.IsNullOrEmpty(fromEntities.Airport))
-        {
-            unsupportedCities.Add(fromEntities.From);
-        }
-
-        var toEntities = luisResult.ToEntities;
-        if (!string.IsNullOrEmpty(toEntities.To) && string.IsNullOrEmpty(toEntities.Airport))
-        {
-            unsupportedCities.Add(toEntities.To);
-        }
-
-        if (unsupportedCities.Any())
-        {
-            var messageText = $"Sorry but the following airports are not supported: {string.Join(',', unsupportedCities)}";
-            var message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
-            await context.SendActivityAsync(message, cancellationToken);
-        }
     }
 
     private async Task<DialogTurnResult> IntroStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)

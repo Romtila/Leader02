@@ -1,29 +1,29 @@
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Leader.Domain.Interfaces;
+using Leader02.Application.IServices;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Leader02.ChatBotApi.Dialogs;
 
 public class RepeatQuestionDialog : CancelAndHelpDialog
 {
-    private readonly IRequirementRepository _requirementRepository;
-    private readonly ILegalActRepository _legalActRepository;
-    private readonly ISubDepartmentRepository _subDepartmentRepository;
+    private readonly IRequirementService _requirementService;
+    private readonly ILegalActService _legalActService;
+    private readonly IDepartmentService _departmentService;
     private readonly ILogger _logger;
 
-    public RepeatQuestionDialog(ConsultationDialog consultationDialog,
-        IServiceScopeFactory serviceScopeFactory, ILogger<RepeatQuestionDialog> logger)
+    public RepeatQuestionDialog(ConsultationDialog consultationDialog, ILogger<RepeatQuestionDialog> logger, IRequirementService requirementService,
+        ILegalActService legalActService, IDepartmentService departmentService)
         : base(nameof(RepeatQuestionDialog))
     {
         _logger = logger;
-        _requirementRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IRequirementRepository>();
-        _legalActRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ILegalActRepository>();
-        _subDepartmentRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ISubDepartmentRepository>();
+        _requirementService = requirementService;
+        _legalActService = legalActService;
+        _departmentService = departmentService;
 
         AddDialog(new TextPrompt(nameof(TextPrompt)));
         AddDialog(consultationDialog);
@@ -56,20 +56,10 @@ public class RepeatQuestionDialog : CancelAndHelpDialog
                                     userMessage.ToLower().Contains("треб") ||
                                     userMessage.ToLower().Contains("нужн")))
         {
-            //ищем в обязательствах
-            await stepContext.Context.SendActivityAsync(
-                MessageFactory.Text("json с требованием", inputHint: InputHints.IgnoringInput), cancellationToken);
+            var requirement = await _requirementService.FindByBasicRequirementDescriptionAndDetail(userMessage, cancellationToken);
 
-            return await stepContext.ReplaceDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
-        }
-
-        //ищем в органах власти
-        if (userMessage != null && ((userMessage.ToLower().Contains("орган") && userMessage.ToLower().Contains("власт")) ||
-                                    userMessage.ToLower().Contains("какой департамент")))
-        {
-            //ищем в органах власти
             await stepContext.Context.SendActivityAsync(
-                MessageFactory.Text("json с требованием", inputHint: InputHints.IgnoringInput), cancellationToken);
+                MessageFactory.Text(JsonSerializer.Serialize(requirement), inputHint: InputHints.IgnoringInput), cancellationToken);
 
             return await stepContext.ReplaceDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
         }
@@ -80,9 +70,22 @@ public class RepeatQuestionDialog : CancelAndHelpDialog
                                     (userMessage.ToLower().Contains("норм") && userMessage.ToLower().Contains("права")) ||
                                     userMessage.ToLower().Contains("закон")))
         {
-            //ищем в нпа
+            var legalAct = await _legalActService.FindByName(userMessage, cancellationToken);
+
             await stepContext.Context.SendActivityAsync(
-                MessageFactory.Text("json с требованием", inputHint: InputHints.IgnoringInput), cancellationToken);
+                MessageFactory.Text(JsonSerializer.Serialize(legalAct), inputHint: InputHints.IgnoringInput), cancellationToken);
+
+            return await stepContext.ReplaceDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+        }
+
+        //ищем в органах власти
+        if (userMessage != null && ((userMessage.ToLower().Contains("орган") && userMessage.ToLower().Contains("власт")) ||
+                                    userMessage.ToLower().Contains("какой департамент")))
+        {
+            var department = await _departmentService.FindByAbbreviationOrNameOrDescription(userMessage, cancellationToken);
+
+            await stepContext.Context.SendActivityAsync(
+                MessageFactory.Text(JsonSerializer.Serialize(department), inputHint: InputHints.IgnoringInput), cancellationToken);
 
             return await stepContext.ReplaceDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
         }

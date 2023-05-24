@@ -32,9 +32,8 @@ public class Startup
         services.AddDbContext<Leader02Context>(options =>
             options.UseNpgsql("Host=localhost;Port=5432;Database=Leader02;Username=postgres;Password=admin"));
 
-        services.AddScoped<IRequirementRepository, RequirementRepository>();
-        services.AddScoped<ILegalActRepository, LegalActRepository>();
-        services.AddScoped<ISubDepartmentRepository, SubDepartmentRepository>();
+        services.AddRepositories();
+        services.AddServices();
         
         // Create the Bot Framework Authentication to be used with the Bot Adapter.
         services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>();
@@ -51,18 +50,7 @@ public class Startup
         // Create the Conversation state. (Used by the Dialog system itself.)
         services.AddSingleton<ConversationState>();
 
-        // Register LUIS recognizer
-        services.AddSingleton<FlightBookingRecognizer>();
-
-        // Register the BookingDialog.
-        services.AddSingleton<BookingDialog>();
-        
-        services.AddSingleton<ConsultationDialog>();
-        services.AddSingleton<FeedBackDialog>();
-        services.AddSingleton<RepeatQuestionDialog>();
-
-        // The MainDialog that will be run by the bot.
-        services.AddSingleton<MainDialog>();
+        services.AddDialogs();
 
         // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
         services.AddTransient<IBot, DialogAndWelcomeBot<MainDialog>>();
