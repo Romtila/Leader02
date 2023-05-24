@@ -232,8 +232,9 @@ namespace Leader02.Infrastructure.Migrations
                 name: "Requirements",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Number = table.Column<int>(type: "integer", nullable: false),
                     DepartmentId = table.Column<int>(type: "integer", nullable: true),
                     SubDepartmentId = table.Column<int>(type: "integer", nullable: true),
                     BasicRequirementDescription = table.Column<string>(type: "text", nullable: true),
@@ -331,6 +332,24 @@ namespace Leader02.Infrastructure.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RequirementBasicRequirements",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    BasicRequirement = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequirementBasicRequirements", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RequirementBasicRequirements_Requirements_Id",
+                        column: x => x.Id,
+                        principalTable: "Requirements",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ChatBotRequests_DepartmentId",
                 table: "ChatBotRequests",
@@ -424,7 +443,7 @@ namespace Leader02.Infrastructure.Migrations
                 name: "OpenControlServices");
 
             migrationBuilder.DropTable(
-                name: "Requirements");
+                name: "RequirementBasicRequirements");
 
             migrationBuilder.DropTable(
                 name: "ChatBotRequests");
@@ -434,6 +453,9 @@ namespace Leader02.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "DepartmentUsers");
+
+            migrationBuilder.DropTable(
+                name: "Requirements");
 
             migrationBuilder.DropTable(
                 name: "Users");

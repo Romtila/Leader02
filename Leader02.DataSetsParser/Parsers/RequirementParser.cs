@@ -68,6 +68,7 @@ public class RequirementParser
         
         var worksheet = package.Workbook.Worksheets[0];
         
+        //var requirements = new List<Requirement>(worksheet.Dimension.Rows);
         var requirements = new List<Requirement>(worksheet.Dimension.Rows);
 
         var number = _context.Requirements.OrderByDescending(x => x.Id).FirstOrDefault()?.Number ?? 0;//номер требования
@@ -270,6 +271,7 @@ public class RequirementParser
 
             var requirement = new Requirement
             {
+                RequirementBasicRequirement = new RequirementBasicRequirement{BasicRequirement = basicRequirementDescription + " " + basicRequirementDetail},
                 Number = number,
                 Department = subDepartment?.Department,
                 SubDepartment = subDepartment,

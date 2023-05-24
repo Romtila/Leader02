@@ -433,6 +433,19 @@ namespace Leader02.Infrastructure.Migrations
                     b.ToTable("Requirements");
                 });
 
+            modelBuilder.Entity("Leader.Domain.Entity.RequirementBasicRequirement", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("BasicRequirement")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RequirementBasicRequirements");
+                });
+
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>
                 {
                     b.Property<int>("Id")
@@ -620,6 +633,17 @@ namespace Leader02.Infrastructure.Migrations
                     b.Navigation("SubDepartment");
                 });
 
+            modelBuilder.Entity("Leader.Domain.Entity.RequirementBasicRequirement", b =>
+                {
+                    b.HasOne("Leader.Domain.Entity.Requirement", "Requirement")
+                        .WithOne("RequirementBasicRequirement")
+                        .HasForeignKey("Leader.Domain.Entity.RequirementBasicRequirement", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Requirement");
+                });
+
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>
                 {
                     b.HasOne("Leader.Domain.Entity.Department", "Department")
@@ -648,6 +672,11 @@ namespace Leader02.Infrastructure.Migrations
             modelBuilder.Entity("Leader.Domain.Entity.DepartmentUser", b =>
                 {
                     b.Navigation("Consultations");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.Requirement", b =>
+                {
+                    b.Navigation("RequirementBasicRequirement");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>

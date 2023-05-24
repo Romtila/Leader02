@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Leader02.Infrastructure.Migrations
 {
     [DbContext(typeof(Leader02Context))]
-    [Migration("20230522155429_Initial")]
+    [Migration("20230524102615_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -337,11 +337,11 @@ namespace Leader02.Infrastructure.Migrations
 
             modelBuilder.Entity("Leader.Domain.Entity.Requirement", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("BasicRequirementDescription")
                         .HasColumnType("text");
@@ -375,6 +375,9 @@ namespace Leader02.Infrastructure.Migrations
 
                     b.Property<string>("IndicationOfNpa")
                         .HasColumnType("text");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Ogv")
                         .HasColumnType("text");
@@ -431,6 +434,19 @@ namespace Leader02.Infrastructure.Migrations
                     b.HasIndex("SubDepartmentId");
 
                     b.ToTable("Requirements");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.RequirementBasicRequirement", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("BasicRequirement")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RequirementBasicRequirements");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>
@@ -620,6 +636,17 @@ namespace Leader02.Infrastructure.Migrations
                     b.Navigation("SubDepartment");
                 });
 
+            modelBuilder.Entity("Leader.Domain.Entity.RequirementBasicRequirement", b =>
+                {
+                    b.HasOne("Leader.Domain.Entity.Requirement", "Requirement")
+                        .WithOne("RequirementBasicRequirement")
+                        .HasForeignKey("Leader.Domain.Entity.RequirementBasicRequirement", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Requirement");
+                });
+
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>
                 {
                     b.HasOne("Leader.Domain.Entity.Department", "Department")
@@ -648,6 +675,11 @@ namespace Leader02.Infrastructure.Migrations
             modelBuilder.Entity("Leader.Domain.Entity.DepartmentUser", b =>
                 {
                     b.Navigation("Consultations");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.Requirement", b =>
+                {
+                    b.Navigation("RequirementBasicRequirement");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>
