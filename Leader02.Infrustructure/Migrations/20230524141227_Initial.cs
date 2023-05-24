@@ -279,6 +279,24 @@ namespace Leader02.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SubDepartmentTsVectors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubDepartmentTsVectors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubDepartmentTsVectors_SubDepartments_Id",
+                        column: x => x.Id,
+                        principalTable: "SubDepartments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ChatBotRequestsMessages",
                 columns: table => new
                 {
@@ -333,17 +351,36 @@ namespace Leader02.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RequirementBasicRequirements",
+                name: "LegalActTsVectors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LegalActTsVectors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LegalActTsVectors_LegalActs_Id",
+                        column: x => x.Id,
+                        principalTable: "LegalActs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RequirementTsVectors",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false),
+                    Number = table.Column<int>(type: "integer", nullable: true),
                     BasicRequirement = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RequirementBasicRequirements", x => x.Id);
+                    table.PrimaryKey("PK_RequirementTsVectors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RequirementBasicRequirements_Requirements_Id",
+                        name: "FK_RequirementTsVectors_Requirements_Id",
                         column: x => x.Id,
                         principalTable: "Requirements",
                         principalColumn: "Id",
@@ -437,13 +474,16 @@ namespace Leader02.Infrastructure.Migrations
                 name: "ConsultationTopics");
 
             migrationBuilder.DropTable(
-                name: "LegalActs");
+                name: "LegalActTsVectors");
 
             migrationBuilder.DropTable(
                 name: "OpenControlServices");
 
             migrationBuilder.DropTable(
-                name: "RequirementBasicRequirements");
+                name: "RequirementTsVectors");
+
+            migrationBuilder.DropTable(
+                name: "SubDepartmentTsVectors");
 
             migrationBuilder.DropTable(
                 name: "ChatBotRequests");
@@ -453,6 +493,9 @@ namespace Leader02.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "DepartmentUsers");
+
+            migrationBuilder.DropTable(
+                name: "LegalActs");
 
             migrationBuilder.DropTable(
                 name: "Requirements");

@@ -30,7 +30,7 @@ public class DepartmentParser
                 Abbreviation = worksheet.Name, 
                 Description = "", 
                 Name = worksheet.Cells[1, 1].Value.ToString() ?? "", 
-                DepartmentUrl = "",
+                DepartmentUrl = "", 
                 SubDepartments = new List<SubDepartment>()
             };
 
@@ -40,6 +40,10 @@ public class DepartmentParser
                 {
                     department.SubDepartments.Add(new SubDepartment
                     {
+                        SubDepartmentTsVector = new SubDepartmentTsVector
+                        {
+                            Description = department.Abbreviation + " " + department.Name + " " + department.Description + " " + worksheet.Cells[row, 1].Value
+                        }, 
                         Name = worksheet.Cells[row, 1].Value.ToString() ?? "", 
                         SubDepartmentDescription = "", 
                         SubDepartmentUrl = ""

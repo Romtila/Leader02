@@ -4,5 +4,5 @@ namespace Leader02.Application.IServices;
 
 public interface ISubDepartmentService
 {
-    Task<SubDepartmentDto> FindByNameOrDescription(string searchString, CancellationToken ct);
+    Task<SubDepartmentDto?> FindByNameOrDescription(string searchString, CancellationToken ct);
 }

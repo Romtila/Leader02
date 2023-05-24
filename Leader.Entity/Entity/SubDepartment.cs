@@ -7,6 +7,8 @@ public class SubDepartment
     public string? SubDepartmentUrl { get; set; }
     public string? SubDepartmentDescription { get; set; }
     
+    public SubDepartmentTsVector? SubDepartmentTsVector { get; set; }
+    
     public int? DepartmentId { get; set; }
     public Department? Department { get; set; }
     

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Leader02.Infrastructure.DbConfigurations;
 
-public class RequirementBasicRequirementConfiguration: IEntityTypeConfiguration<RequirementBasicRequirement>
+public class RequirementTsVectorConfiguration : IEntityTypeConfiguration<RequirementTsVector>
 {
-    public void Configure(EntityTypeBuilder<RequirementBasicRequirement> builder)
+    public void Configure(EntityTypeBuilder<RequirementTsVector> builder)
     {
         builder.HasKey(x => x.Id);
     }

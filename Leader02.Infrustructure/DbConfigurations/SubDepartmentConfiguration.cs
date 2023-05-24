@@ -29,5 +29,9 @@ public class SubDepartmentConfiguration : IEntityTypeConfiguration<SubDepartment
         builder.HasMany(x => x.Requirements)
             .WithOne(x => x.SubDepartment)
             .HasForeignKey(x => x.SubDepartmentId);
+
+        builder.HasOne(e => e.SubDepartmentTsVector)
+            .WithOne(e => e.SubDepartment)
+            .HasForeignKey<SubDepartmentTsVector>();
     }
 }

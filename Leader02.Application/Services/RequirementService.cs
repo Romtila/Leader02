@@ -1,16 +1,19 @@
 using Leader.Domain.Interfaces;
 using Leader02.Application.DtoModels;
 using Leader02.Application.IServices;
+using Leader02.Application.Mappers;
 
 namespace Leader02.Application.Services;
 
 public class RequirementService : IRequirementService
 {
     private readonly IRequirementRepository _requirementRepository;
+    private readonly IRequirementTsVectorRepository _requirementTsVectorRepository;
 
-    public RequirementService(IRequirementRepository requirementRepository)
+    public RequirementService(IRequirementRepository requirementRepository, IRequirementTsVectorRepository requirementTsVectorRepository)
     {
         _requirementRepository = requirementRepository;
+        _requirementTsVectorRepository = requirementTsVectorRepository;
     }
 
     public Task<List<RequirementDto>> FindManyBySubDepartment(int id, CancellationToken ct)
@@ -23,15 +26,20 @@ public class RequirementService : IRequirementService
         throw new NotImplementedException();
     }
 
-    public Task<RequirementDto> FindByBasicRequirementDescriptionAndDetail(string searchString, CancellationToken ct)
+    public async Task<List<RequirementDto>?> FindManyByBasicRequirement(string searchString, CancellationToken ct)
     {
-        if (searchString.ToLower().Contains("обяза") ||
-            searchString.ToLower().Contains("треб") ||
-            searchString.ToLower().Contains("нужн"))
+        var requirementTsVectors = await _requirementTsVectorRepository.FindManyByBasicRequirementDetail(searchString, ct);
+
+        var requirementIds = requirementTsVectors.Select(x => x.Id).ToArray();
+
+        var requirements = await _requirementRepository.GetManyByIds(requirementIds, ct);
+        
+        if (requirements.Count > 0)
         {
+            return requirements.RequirementToRequirementDto();
         }
 
-        throw new NotImplementedException();
+        return null;
     }
 
     public Task<RequirementDto> FindByBasicRequirementDescription(string basicRequirementDescription, CancellationToken ct)

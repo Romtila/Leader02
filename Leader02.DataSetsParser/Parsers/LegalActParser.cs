@@ -39,6 +39,7 @@ public class LegalActParser
             
             var legalAct = new LegalAct
             {
+                LegalActTsVectorName = new LegalActTsVector {Name = name},
                 Name = name, 
                 DocumentDate = documentDate, 
                 PublishDate = publishDate, 

@@ -10,4 +10,8 @@
       <ProjectReference Include="..\Leader.Entity\Leader.Entity.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Riok.Mapperly" Version="2.8.0" />
+    </ItemGroup>
+
 </Project>

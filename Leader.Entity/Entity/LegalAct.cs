@@ -9,6 +9,9 @@ public class LegalAct
     public DateTime PublishDate { get; set; }
     public string? LegalActUrl { get; set; }
 
+    
+    public LegalActTsVector? LegalActTsVectorName { get; set; }
+    
     public int? DepartmentId { get; set; }
     public Department? Department { get; set; }
     

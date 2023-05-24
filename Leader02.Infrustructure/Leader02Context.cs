@@ -21,15 +21,17 @@ public class Leader02Context : DbContext
         modelBuilder.ApplyConfiguration(new DepartmentUserConfiguration());
         modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
         modelBuilder.ApplyConfiguration(new SubDepartmentConfiguration());
+        modelBuilder.ApplyConfiguration(new SubDepartmentTsVectorConfiguration());
         modelBuilder.ApplyConfiguration(new ConsultationConfiguration());
         modelBuilder.ApplyConfiguration(new ConsultationSlotConfiguration());
         modelBuilder.ApplyConfiguration(new ConsultationTopicConfiguration());
         modelBuilder.ApplyConfiguration(new ChatBotRequestConfiguration());
         modelBuilder.ApplyConfiguration(new ChatBotRequestMessageConfiguration());
         modelBuilder.ApplyConfiguration(new RequirementConfiguration());
-        modelBuilder.ApplyConfiguration(new RequirementBasicRequirementConfiguration());
+        modelBuilder.ApplyConfiguration(new RequirementTsVectorConfiguration());
         modelBuilder.ApplyConfiguration(new OpenControlServiceConfiguration());
         modelBuilder.ApplyConfiguration(new LegalActConfiguration());
+        modelBuilder.ApplyConfiguration(new LegalActTsVectorConfiguration());
 
         modelBuilder.DateTimeWithoutTimeZoneConfigure();
 
@@ -51,5 +53,8 @@ public class Leader02Context : DbContext
     public DbSet<LegalAct> LegalActs { get; set; }
     public DbSet<OpenControlService> OpenControlServices { get; set; }
     public DbSet<Requirement> Requirements { get; set; }
-    public DbSet<RequirementBasicRequirement> RequirementBasicRequirements { get; set; }
+    
+    public DbSet<RequirementTsVector> RequirementTsVectors { get; set; }
+    public DbSet<LegalActTsVector> LegalActTsVectors { get; set; }
+    public DbSet<SubDepartmentTsVector> SubDepartmentTsVectors { get; set; }
 }

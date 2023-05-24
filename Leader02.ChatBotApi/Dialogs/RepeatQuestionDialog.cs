@@ -56,7 +56,7 @@ public class RepeatQuestionDialog : CancelAndHelpDialog
                                     userMessage.ToLower().Contains("треб") ||
                                     userMessage.ToLower().Contains("нужн")))
         {
-            var requirement = await _requirementService.FindByBasicRequirementDescriptionAndDetail(userMessage, cancellationToken);
+            var requirement = await _requirementService.FindManyByBasicRequirement(userMessage, cancellationToken);
 
             await stepContext.Context.SendActivityAsync(
                 MessageFactory.Text(JsonSerializer.Serialize(requirement), inputHint: InputHints.IgnoringInput), cancellationToken);

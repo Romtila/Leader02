@@ -271,7 +271,11 @@ public class RequirementParser
 
             var requirement = new Requirement
             {
-                RequirementBasicRequirement = new RequirementBasicRequirement{BasicRequirement = basicRequirementDescription + " " + basicRequirementDetail},
+                RequirementBasicRequirement = new RequirementTsVector
+                {
+                    BasicRequirement = basicRequirementDescription + " " + basicRequirementDetail,
+                    Number = number
+                },
                 Number = number,
                 Department = subDepartment?.Department,
                 SubDepartment = subDepartment,

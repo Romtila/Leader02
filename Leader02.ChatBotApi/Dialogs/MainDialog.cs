@@ -63,9 +63,11 @@ public class MainDialog : ComponentDialog
                                     userMessage.ToLower().Contains("треб") ||
                                     userMessage.ToLower().Contains("нужн")))
         {
-            var searchResult = await _requirementService.FindByBasicRequirementDescriptionAndDetail(userMessage, cancellationToken);
-            //ищем в обязательствах
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
+            var searchResult = await _requirementService.FindManyByBasicRequirement(userMessage, cancellationToken);
+
+            await stepContext.Context.SendActivityAsync(
+                MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
+
             return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
         }
 
@@ -74,9 +76,10 @@ public class MainDialog : ComponentDialog
                                     userMessage.ToLower().Contains("какой департамент")))
         {
             var searchResult = await _subDepartmentService.FindByNameOrDescription(userMessage, cancellationToken);
-            //ищем в органах власти
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput)
-                , cancellationToken);
+
+            await stepContext.Context.SendActivityAsync(
+                MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
+
             return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
         }
 
@@ -87,8 +90,10 @@ public class MainDialog : ComponentDialog
                                     userMessage.ToLower().Contains("закон")))
         {
             var searchResult = await _legalActService.FindByName(userMessage, cancellationToken);
-            //ищем в нпа
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
+
+            await stepContext.Context.SendActivityAsync(
+                MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
+
             return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
         }
 

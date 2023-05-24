@@ -1,18 +1,22 @@
 using Leader.Domain.Interfaces;
 using Leader02.Application.DtoModels;
 using Leader02.Application.IServices;
+using Leader02.Application.Mappers;
 
 namespace Leader02.Application.Services;
 
 public class LegalActService : ILegalActService
 {
+    private readonly ILegalActTsVectorRepository _legalActTsVectorRepository;
     private readonly ILegalActRepository _legalActRepository;
 
-    public LegalActService(ILegalActRepository legalActRepository)
+    public LegalActService(ILegalActTsVectorRepository legalActTsVectorRepository, ILegalActRepository legalActRepository)
     {
+        _legalActTsVectorRepository = legalActTsVectorRepository;
         _legalActRepository = legalActRepository;
     }
 
+    
     public Task<List<LegalActDto>> FindBySubDepartment(int id, CancellationToken ct)
     {
         throw new NotImplementedException();
@@ -23,15 +27,16 @@ public class LegalActService : ILegalActService
         throw new NotImplementedException();
     }
 
-    public Task<LegalActDto> FindByName(string name, CancellationToken ct)
+    public async Task<LegalActDto?> FindByName(string name, CancellationToken ct)
     {
-        if (name.ToLower().Contains("нпа") ||
-            (name.ToLower().Contains("прав") && name.ToLower().Contains("акт")) ||
-            (name.ToLower().Contains("норм") && name.ToLower().Contains("права")) ||
-            name.ToLower().Contains("закон"))
+        var legalActTsVectors = await _legalActTsVectorRepository.FindManyByName(name, ct);
+
+        if (legalActTsVectors.Count > 0)
         {
+            var legalAct = await _legalActRepository.GetById(legalActTsVectors[0].Id, ct);
+            if (legalAct != null) return legalAct.LegalActToLegalActDto();
         }
 
-        throw new NotImplementedException();
+        return null;
     }
-}
+ }

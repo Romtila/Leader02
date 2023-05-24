@@ -1,5 +1,6 @@
 using Leader.Domain.Entity;
 using Leader.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Leader02.Infrastructure.Repositories;
 
@@ -9,9 +10,9 @@ public class SubDepartmentRepository : BaseRepository<SubDepartment>, ISubDepart
     {
     }
 
-    public Task<SubDepartment> GetById(int id, CancellationToken ct)
+    public async Task<SubDepartment?> GetById(int id, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        return await DbContext.SubDepartments.FirstOrDefaultAsync(x => x.Id == id, cancellationToken: ct);
     }
 
     public Task<List<SubDepartment>> GetByDepartmentId(int id, CancellationToken ct)

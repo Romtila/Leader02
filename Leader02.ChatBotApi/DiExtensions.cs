@@ -12,8 +12,11 @@ public static class DiExtensions
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IRequirementRepository, RequirementRepository>();
+        services.AddScoped<IRequirementTsVectorRepository, RequirementTsVectorRepository>();
         services.AddScoped<ILegalActRepository, LegalActRepository>();
+        services.AddScoped<ILegalActTsVectorRepository, LegalActTsVectorRepository>();
         services.AddScoped<ISubDepartmentRepository, SubDepartmentRepository>();
+        services.AddScoped<ISubDepartmentTsVectorRepository, SubDepartmentTsVectorRepository>();
 
         return services;
     }

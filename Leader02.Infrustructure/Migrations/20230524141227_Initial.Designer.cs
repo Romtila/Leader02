@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Leader02.Infrastructure.Migrations
 {
     [DbContext(typeof(Leader02Context))]
-    [Migration("20230524105824_Initial")]
+    [Migration("20230524141227_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -308,6 +308,20 @@ namespace Leader02.Infrastructure.Migrations
                     b.ToTable("LegalActs");
                 });
 
+            modelBuilder.Entity("Leader.Domain.Entity.LegalActTsVector", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LegalActTsVectors");
+                });
+
             modelBuilder.Entity("Leader.Domain.Entity.OpenControlService", b =>
                 {
                     b.Property<int>("Id")
@@ -436,7 +450,7 @@ namespace Leader02.Infrastructure.Migrations
                     b.ToTable("Requirements");
                 });
 
-            modelBuilder.Entity("Leader.Domain.Entity.RequirementBasicRequirement", b =>
+            modelBuilder.Entity("Leader.Domain.Entity.RequirementTsVector", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
@@ -444,9 +458,12 @@ namespace Leader02.Infrastructure.Migrations
                     b.Property<string>("BasicRequirement")
                         .HasColumnType("text");
 
+                    b.Property<int?>("Number")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.ToTable("RequirementBasicRequirements");
+                    b.ToTable("RequirementTsVectors");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.SubDepartment", b =>
@@ -475,6 +492,20 @@ namespace Leader02.Infrastructure.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("SubDepartments");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.SubDepartmentTsVector", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubDepartmentTsVectors");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.User", b =>
@@ -621,6 +652,17 @@ namespace Leader02.Infrastructure.Migrations
                     b.Navigation("SubDepartment");
                 });
 
+            modelBuilder.Entity("Leader.Domain.Entity.LegalActTsVector", b =>
+                {
+                    b.HasOne("Leader.Domain.Entity.LegalAct", "LegalAct")
+                        .WithOne("LegalActTsVectorName")
+                        .HasForeignKey("Leader.Domain.Entity.LegalActTsVector", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LegalAct");
+                });
+
             modelBuilder.Entity("Leader.Domain.Entity.Requirement", b =>
                 {
                     b.HasOne("Leader.Domain.Entity.Department", "Department")
@@ -636,11 +678,11 @@ namespace Leader02.Infrastructure.Migrations
                     b.Navigation("SubDepartment");
                 });
 
-            modelBuilder.Entity("Leader.Domain.Entity.RequirementBasicRequirement", b =>
+            modelBuilder.Entity("Leader.Domain.Entity.RequirementTsVector", b =>
                 {
                     b.HasOne("Leader.Domain.Entity.Requirement", "Requirement")
                         .WithOne("RequirementBasicRequirement")
-                        .HasForeignKey("Leader.Domain.Entity.RequirementBasicRequirement", "Id")
+                        .HasForeignKey("Leader.Domain.Entity.RequirementTsVector", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -654,6 +696,17 @@ namespace Leader02.Infrastructure.Migrations
                         .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Leader.Domain.Entity.SubDepartmentTsVector", b =>
+                {
+                    b.HasOne("Leader.Domain.Entity.SubDepartment", "SubDepartment")
+                        .WithOne("SubDepartmentTsVector")
+                        .HasForeignKey("Leader.Domain.Entity.SubDepartmentTsVector", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubDepartment");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.ChatBotRequest", b =>
@@ -677,6 +730,11 @@ namespace Leader02.Infrastructure.Migrations
                     b.Navigation("Consultations");
                 });
 
+            modelBuilder.Entity("Leader.Domain.Entity.LegalAct", b =>
+                {
+                    b.Navigation("LegalActTsVectorName");
+                });
+
             modelBuilder.Entity("Leader.Domain.Entity.Requirement", b =>
                 {
                     b.Navigation("RequirementBasicRequirement");
@@ -693,6 +751,8 @@ namespace Leader02.Infrastructure.Migrations
                     b.Navigation("LegalActs");
 
                     b.Navigation("Requirements");
+
+                    b.Navigation("SubDepartmentTsVector");
                 });
 
             modelBuilder.Entity("Leader.Domain.Entity.User", b =>

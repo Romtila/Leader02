@@ -7,7 +7,7 @@ public class Requirement
     public long Id { get; set; }
     public int Number { get; set; }
 
-    public RequirementBasicRequirement? RequirementBasicRequirement { get; set; }
+    public RequirementTsVector? RequirementBasicRequirement { get; set; }
     
 
     public int? DepartmentId { get; set; }

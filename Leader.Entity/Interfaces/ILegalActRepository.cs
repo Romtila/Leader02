@@ -4,7 +4,8 @@ namespace Leader.Domain.Interfaces;
 
 public interface ILegalActRepository : IBaseRepository<LegalAct>
 {
-    Task<List<LegalAct>> FindBySubDepartment(int id, CancellationToken ct);
-    Task<List<LegalAct>> FindByDepartment(int id, CancellationToken ct);
-    Task<List<LegalAct>> FindByName(int id, CancellationToken ct);
+    Task<LegalAct?> GetById(int id, CancellationToken ct);
+    Task<List<LegalAct>> FindBySubDepartmentId(int id, CancellationToken ct);
+    Task<List<LegalAct>> FindByDepartmentId(int id, CancellationToken ct);
+    Task<List<LegalAct>> FindManyByName(string id, CancellationToken ct);
 }

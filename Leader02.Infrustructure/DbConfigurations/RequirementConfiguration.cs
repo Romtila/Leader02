@@ -12,6 +12,6 @@ public class RequirementConfiguration : IEntityTypeConfiguration<Requirement>
 
         builder.HasOne(e => e.RequirementBasicRequirement)
             .WithOne(e => e.Requirement)
-            .HasForeignKey<RequirementBasicRequirement>();
+            .HasForeignKey<RequirementTsVector>();
     }
 }
