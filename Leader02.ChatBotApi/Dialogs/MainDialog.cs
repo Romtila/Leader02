@@ -3,6 +3,7 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.18.1
 
+using System.Text.Json;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
@@ -62,8 +63,9 @@ public class MainDialog : ComponentDialog
                                     userMessage.ToLower().Contains("треб") ||
                                     userMessage.ToLower().Contains("нужн")))
         {
+            var searchResult = await _requirementService.FindByBasicRequirementDescriptionAndDetail(userMessage, cancellationToken);
             //ищем в обязательствах
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("json с требованием", inputHint: InputHints.IgnoringInput), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
             return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
         }
 
@@ -71,8 +73,9 @@ public class MainDialog : ComponentDialog
         if (userMessage != null && ((userMessage.ToLower().Contains("орган") && userMessage.ToLower().Contains("власт")) ||
                                     userMessage.ToLower().Contains("какой департамент")))
         {
+            var searchResult = await _subDepartmentService.FindByNameOrDescription(userMessage, cancellationToken);
             //ищем в органах власти
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("json с органов власти", inputHint: InputHints.IgnoringInput)
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput)
                 , cancellationToken);
             return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
         }
@@ -83,8 +86,9 @@ public class MainDialog : ComponentDialog
                                     (userMessage.ToLower().Contains("норм") && userMessage.ToLower().Contains("права")) ||
                                     userMessage.ToLower().Contains("закон")))
         {
+            var searchResult = await _legalActService.FindByName(userMessage, cancellationToken);
             //ищем в нпа
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("json с нпа", inputHint: InputHints.IgnoringInput), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
             return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
         }
 
