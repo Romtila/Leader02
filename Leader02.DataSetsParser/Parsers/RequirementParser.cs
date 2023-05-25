@@ -70,21 +70,18 @@ public class RequirementParser
         
         var worksheet = package.Workbook.Worksheets[0];
         
-        //var requirements = new List<Requirement>(worksheet.Dimension.Rows);
+        #region объявление переменных
+        
+        var number = _context.Requirements.OrderByDescending(x => x.Id).FirstOrDefault()?.Number + 1 ?? 0;//номер требования
+        
         var requirements = new List<Requirement>(worksheet.Dimension.Rows);
         var requirementNpas = new List<RequirementNpa>();
         var requirementProfilings = new List<RequirementProfiling>();
         var requirementResponsibilities = new List<RequirementResponsibility>();
-        var number = _context.Requirements.OrderByDescending(x => x.Id).FirstOrDefault()?.Number ?? 0;//номер требования
-
+        
         var basicRequirementDescription = string.Empty;
         var basicRequirementDetail = string.Empty;
-        var requirementType = RequirementType.Object;
-        var requirementNpasJson = string.Empty;
-        var requirementProfilingJson = string.Empty;
-        var requirementVerificationMethodsJson = string.Empty;
-        var requirementResponsibilitiesJson = string.Empty;
-        
+
         var requirementVerificationMethod = new RequirementVerificationMethod();
         var requirementVerificationMethods = new List<RequirementVerificationMethod>();
         var verificationMethodDocuments = new List<VerificationMethodDocument>();
@@ -93,19 +90,24 @@ public class RequirementParser
         
         var sanctionInfos = new List<SanctionInfo>();
 
+        var requirement = new Requirement
+        {
+            SubDepartment = subDepartment,
+            Department = subDepartment?.Department
+        };
 
-        var requirement = new Requirement();
-
+        #endregion
+        
         for (var i = 3; i <= worksheet.Dimension.Rows + 1; i++)
         {
             if (i == worksheet.Dimension.Rows + 1)
             {
                 requirements.Add(requirement);
             }
-            
+                        
             if (worksheet.Cells[i, 3].Value != null && worksheet.Cells[i, 3].Value.ToString() != string.Empty)
             {
-                if (basicRequirementDetail != string.Empty)
+                if (!string.IsNullOrEmpty(basicRequirementDetail))
                 {
                     requirement.RequirementNpasJson = JsonConvert.SerializeObject(requirementNpas);
                     requirement.RequirementProfilingJson = JsonConvert.SerializeObject(requirementProfilings);
@@ -132,7 +134,7 @@ public class RequirementParser
             {
                 number += 1;
                 
-                if (requirement.BasicRequirementDetail != string.Empty)
+                if (!string.IsNullOrEmpty(requirement.BasicRequirementDetail))
                 {
                     requirement.RequirementNpasJson = JsonConvert.SerializeObject(requirementNpas);
                     requirement.RequirementProfilingJson = JsonConvert.SerializeObject(requirementProfilings);
@@ -150,14 +152,21 @@ public class RequirementParser
                 {
                     BasicRequirementDescription = basicRequirementDescription,
                     BasicRequirementDetail = basicRequirementDetail,
-                    Number = number
+                    Number = number,
+                    SubDepartment = subDepartment,
+                    Department = subDepartment?.Department,
+                    RequirementBasicRequirement = new RequirementTsVector
+                    {
+                        Number = number, 
+                        BasicRequirement =basicRequirementDescription + " " + basicRequirementDetail
+                    }
                 };
                 basicRequirementDetail = worksheet.Cells[i, 4].Value.ToString();
             }
 
             if (worksheet.Cells[i, 5].Value != null && worksheet.Cells[i, 5].Value.ToString() != string.Empty)
             {
-                requirementType = worksheet.Cells[i, 5].Value.ToString() == "1"
+                var requirementType = worksheet.Cells[i, 5].Value.ToString() == "1"
                     ? RequirementType.Subject
                     : RequirementType.Object;
 
@@ -183,7 +192,7 @@ public class RequirementParser
                 requirementNpa.ValidityPeriodOfRequirement = worksheet.Cells[i, 8].Value.ToString();
             }
 
-            if(requirementNpa.IndicationOfNpa != string.Empty)
+            if(!string.IsNullOrEmpty(requirementNpa.IndicationOfNpa))
                 requirementNpas.Add(requirementNpa);
             
             #endregion
@@ -237,10 +246,10 @@ public class RequirementParser
                 verificationMethodDocument.SupportingDocumentsValidity = worksheet.Cells[i, 13].Value.ToString();
             }
             
-            if(verificationMethodDocument.SupportingDocumentsValidity != string.Empty ||
-               verificationMethodDocument.PossibilityOfDocumentsObtaining != string.Empty ||
-               verificationMethodDocument.ConfirmingComplianceDocuments != string.Empty ||
-               verificationMethodDocument.Ogv != string.Empty)
+            if(!string.IsNullOrEmpty(verificationMethodDocument.SupportingDocumentsValidity) ||
+               !string.IsNullOrEmpty(verificationMethodDocument.PossibilityOfDocumentsObtaining) ||
+               !string.IsNullOrEmpty(verificationMethodDocument.ConfirmingComplianceDocuments) ||
+               !string.IsNullOrEmpty(verificationMethodDocument.Ogv))
                 verificationMethodDocuments.Add(verificationMethodDocument);
             
             #endregion
@@ -249,7 +258,7 @@ public class RequirementParser
             
             if (worksheet.Cells[i, 14].Value != null && worksheet.Cells[i, 14].Value.ToString() != string.Empty)
             {
-                if (requirementResponsibility.TypeOfLiability != string.Empty)
+                if (!string.IsNullOrEmpty(requirementResponsibility.TypeOfLiability))
                 {
                     requirementResponsibility.SanctionInfoJson = JsonConvert.SerializeObject(sanctionInfos);
                     requirementResponsibilities.Add(requirementResponsibility);
@@ -278,9 +287,9 @@ public class RequirementParser
                 sanctionInfo.SizeOfSanction = worksheet.Cells[i, 17].Value.ToString();
             }
             
-            if(sanctionInfo.SubjectOfResponsibility != string.Empty || 
-               sanctionInfo.SizeOfSanction != string.Empty || 
-               sanctionInfo.Sanction != string.Empty)
+            if(!string.IsNullOrEmpty(sanctionInfo.SubjectOfResponsibility) ||
+               !string.IsNullOrEmpty(sanctionInfo.SizeOfSanction) ||
+               !string.IsNullOrEmpty(sanctionInfo.Sanction))
                 sanctionInfos.Add(sanctionInfo);
             
             
@@ -340,17 +349,19 @@ public class RequirementParser
                 requirementProfiling.BusinessQuestionContentForProfilingForClarifyingQuestion = worksheet.Cells[i, 27].Value.ToString();
             }
             
-            if(requirementProfiling.TypesOfActivitiesOfSubjects != string.Empty ||
-               requirementProfiling.ClarificationOfTypeOdActivity != string.Empty ||
-               requirementProfiling.CharacteristicForGeneralQuestion != string.Empty ||
-               requirementProfiling.CharacteristicForClarifyingQuestion != string.Empty ||
-               requirementProfiling.BusinessQuestionContentForProfilingForGeneralQuestion != string.Empty ||
-               requirementProfiling.BusinessQuestionContentForProfilingForClarifyingQuestion != string.Empty)
+            if(!string.IsNullOrEmpty(requirementProfiling.TypesOfActivitiesOfSubjects) ||
+               !string.IsNullOrEmpty(requirementProfiling.ClarificationOfTypeOdActivity) ||
+               !string.IsNullOrEmpty(requirementProfiling.CharacteristicForGeneralQuestion) ||
+               !string.IsNullOrEmpty(requirementProfiling.CharacteristicForClarifyingQuestion) ||
+               !string.IsNullOrEmpty(requirementProfiling.BusinessQuestionContentForProfilingForGeneralQuestion) ||
+               !string.IsNullOrEmpty(requirementProfiling.BusinessQuestionContentForProfilingForClarifyingQuestion))
                 requirementProfilings.Add(requirementProfiling);
             
             #endregion
         }
 
+        requirements = requirements.Where(x => x.Number != 0).ToList();
+        
         _context.Requirements.AddRange(requirements);
         _context.SaveChanges();
     }
