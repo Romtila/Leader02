@@ -8,7 +8,12 @@ public class SanctionInfo
     public string? SubjectOfResponsibility { get; set; }	
     
     /// <summary>
-    /// json модели SanctionAndSizeOfSanction
+    /// Санкция
     /// </summary>
-    public string? SanctionAndSizeOfSanctionJson { get; set; }
+    public string? Sanction { get; set; }
+
+    /// <summary>
+    /// Размер санкции
+    /// </summary>
+    public string? SizeOfSanction { get; set; }
 }

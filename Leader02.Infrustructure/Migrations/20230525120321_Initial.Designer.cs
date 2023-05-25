@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Leader02.Infrastructure.Migrations
 {
     [DbContext(typeof(Leader02Context))]
-    [Migration("20230525052536_Initial")]
+    [Migration("20230525120321_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -370,18 +370,22 @@ namespace Leader02.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("RequirementNpasJson")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("RequirementProfilingJson")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("RequirementResponsibilitiesJson")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("RequirementType")
                         .HasColumnType("integer");
 
                     b.Property<string>("RequirementVerificationMethodsJson")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("SubDepartmentId")

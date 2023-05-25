@@ -10,10 +10,10 @@ public class Requirement
     public string? BasicRequirementDescription { get; set; } // Описание базового требования (группы ОТ)	
     public string? BasicRequirementDetail { get; set; } // Детализация базового требования	
     public RequirementType? RequirementType { get; set; } // Тип требования (1-к субъекту, 0-к объекту)	
-    public string? RequirementNpasJson { get; set; } // json с моуделями RequirementNpa
-    public string? RequirementProfilingJson { get; set; } // json модели RequirementProfiling
-    public string? RequirementVerificationMethodsJson { get; set; } // json модели RequirementVerificationMethod
-    public string? RequirementResponsibilitiesJson { get; set; } // json модели RequirementResponsibility
+    public string RequirementNpasJson { get; set; } = string.Empty; // json с моделей RequirementNpa
+    public string RequirementVerificationMethodsJson { get; set; } = string.Empty; // json моделей RequirementVerificationMethod
+    public string RequirementResponsibilitiesJson { get; set; } = string.Empty; // json моделей RequirementResponsibility
+    public string RequirementProfilingJson { get; set; } = string.Empty; // json моделей RequirementProfiling
 
     public RequirementTsVector? RequirementBasicRequirement { get; set; }
 
