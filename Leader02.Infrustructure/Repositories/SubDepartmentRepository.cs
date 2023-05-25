@@ -12,7 +12,10 @@ public class SubDepartmentRepository : BaseRepository<SubDepartment>, ISubDepart
 
     public async Task<SubDepartment?> GetById(int id, CancellationToken ct)
     {
-        return await DbContext.SubDepartments.FirstOrDefaultAsync(x => x.Id == id, cancellationToken: ct);
+        return await DbContext.SubDepartments
+            .Where(x => x.Id == id)
+            .Include(x => x.Department)
+            .FirstOrDefaultAsync(cancellationToken: ct);
     }
 
     public Task<List<SubDepartment>> GetByDepartmentId(int id, CancellationToken ct)

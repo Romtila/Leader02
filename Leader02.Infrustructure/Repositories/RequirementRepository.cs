@@ -12,13 +12,19 @@ public class RequirementRepository : BaseRepository<Requirement>, IRequirementRe
 
     public async Task<Requirement?> GetById(long id, CancellationToken ct)
     {
-        return await DbContext.Requirements.FirstOrDefaultAsync(x => x.Id == id, cancellationToken: ct);
+        return await DbContext.Requirements
+            .Where(x => x.Id == id)
+            .Include(x => x.SubDepartment)
+            .Include(x => x.Department)
+            .FirstOrDefaultAsync(cancellationToken: ct);
     }
 
     public async Task<List<Requirement>> GetManyByIds(IEnumerable<long> ids, CancellationToken ct)
     {
         return await DbContext.Requirements
             .Where(p => ids.Contains(p.Id))
+            .Include(x => x.SubDepartment)
+            .Include(x => x.Department)
             .ToListAsync(cancellationToken: ct);
     }
 

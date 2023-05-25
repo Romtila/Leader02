@@ -2,6 +2,7 @@ using Leader.Domain.Interfaces;
 using Leader02.Application.DtoModels;
 using Leader02.Application.IServices;
 using Leader02.Application.Mappers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Leader02.Application.Services;
 
@@ -10,10 +11,10 @@ public class SubDepartmentService : ISubDepartmentService
     private readonly ISubDepartmentRepository _subDepartmentRepository;
     private readonly ISubDepartmentTsVectorRepository _subDepartmentTsVectorRepository;
 
-    public SubDepartmentService(ISubDepartmentRepository subDepartmentRepository, ISubDepartmentTsVectorRepository subDepartmentTsVectorRepository)
+    public SubDepartmentService(IServiceScopeFactory serviceScopeFactory)
     {
-        _subDepartmentRepository = subDepartmentRepository;
-        _subDepartmentTsVectorRepository = subDepartmentTsVectorRepository;
+        _subDepartmentRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ISubDepartmentRepository>();
+        _subDepartmentTsVectorRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ISubDepartmentTsVectorRepository>();
     }
 
 

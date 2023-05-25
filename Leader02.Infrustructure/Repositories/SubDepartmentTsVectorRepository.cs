@@ -13,7 +13,7 @@ public class SubDepartmentTsVectorRepository : BaseRepository<SubDepartmentTsVec
     public async Task<SubDepartmentTsVector?> FindByName(string name, CancellationToken ct)
     {
         var query = $"""            
-            SELECT "Id", "Number", "BasicRequirement"
+            SELECT "Id", "Description"
             FROM "SubDepartmentTsVectors"
             WHERE "ts" @@ plainto_tsquery('{name}')
             ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc;
@@ -27,7 +27,7 @@ public class SubDepartmentTsVectorRepository : BaseRepository<SubDepartmentTsVec
     public async Task<List<SubDepartmentTsVector>> FindManyByName(string name, CancellationToken ct)
     {
         var query = $"""            
-            SELECT "Id", "Number", "BasicRequirement"
+            SELECT "Id", "Description"
             FROM "SubDepartmentTsVectors"
             WHERE "ts" @@ plainto_tsquery('{name}')
             ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc;

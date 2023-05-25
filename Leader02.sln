@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Leader02.Application", "Lea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Leader02.DataSetsParser", "Leader02.DataSetsParser\Leader02.DataSetsParser.csproj", "{076D4209-0F3D-4567-A924-031570BE67E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leader02.ChatBotApi", "Leader02.ChatBotApi\Leader02.ChatBotApi.csproj", "{A81CC6DD-49AB-4995-A1B6-ED8272AF8812}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Leader02.ChatBotApi", "Leader02.ChatBotApi\Leader02.ChatBotApi.csproj", "{A81CC6DD-49AB-4995-A1B6-ED8272AF8812}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBot", "TestBot\TestBot.csproj", "{8D8A58EA-06FB-4130-BA61-54EF81C1CA30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{A81CC6DD-49AB-4995-A1B6-ED8272AF8812}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A81CC6DD-49AB-4995-A1B6-ED8272AF8812}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A81CC6DD-49AB-4995-A1B6-ED8272AF8812}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D8A58EA-06FB-4130-BA61-54EF81C1CA30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D8A58EA-06FB-4130-BA61-54EF81C1CA30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D8A58EA-06FB-4130-BA61-54EF81C1CA30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D8A58EA-06FB-4130-BA61-54EF81C1CA30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

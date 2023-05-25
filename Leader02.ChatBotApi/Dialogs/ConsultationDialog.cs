@@ -34,6 +34,6 @@ public class ConsultationDialog : CancelAndHelpDialog
         await stepContext.Context.SendActivityAsync(
             MessageFactory.Text("{ссылка на консультирование}", inputHint: InputHints.IgnoringInput), cancellationToken);
 
-        return await stepContext.EndDialogAsync(null, cancellationToken);
+        return await stepContext.EndDialogAsync("", cancellationToken);
     }
 }

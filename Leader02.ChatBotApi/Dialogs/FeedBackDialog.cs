@@ -46,17 +46,17 @@ public class FeedBackDialog : CancelAndHelpDialog
             await stepContext.Context.SendActivityAsync(
                 MessageFactory.Text("Спасибо за обращение. Рад был помочь.", inputHint: InputHints.IgnoringInput), cancellationToken);
 
-            return await stepContext.EndDialogAsync(null, cancellationToken);
+            return await stepContext.EndDialogAsync("", cancellationToken);
         }
 
         var promptMessage = MessageFactory.Text("Хотите ли вы уточнить вопрос или записаться на консультирование?", inputHint: InputHints.IgnoringInput);
 
         return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions {Prompt = promptMessage}, cancellationToken);
     }
-
     private async Task<DialogTurnResult> ThirdStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
     {
         var userMessage = stepContext.Result.ToString();
+
 
         if (userMessage != null && userMessage.ToLower() == "консультирование")
         {

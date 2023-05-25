@@ -13,7 +13,7 @@ public class LegalActTsVectorRepository : BaseRepository<LegalActTsVector>, ILeg
     public async Task<LegalActTsVector?> FindByName(string name, CancellationToken ct)
     {
         var query = $"""            
-            SELECT "Id", "Number", "BasicRequirement"
+            SELECT "Id", "Name"
             FROM "LegalActTsVectors"
             WHERE "ts" @@ plainto_tsquery('{name}')
             ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc;
@@ -27,7 +27,7 @@ public class LegalActTsVectorRepository : BaseRepository<LegalActTsVector>, ILeg
     public async Task<List<LegalActTsVector>> FindManyByName(string name, CancellationToken ct)
     {
         var query = $"""            
-            SELECT "Id", "Number", "BasicRequirement"
+            SELECT "Id", "Name"
             FROM "LegalActTsVectors"
             WHERE "ts" @@ plainto_tsquery('{name}')
             ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc;

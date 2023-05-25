@@ -1,4 +1,3 @@
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Leader02.Application.IServices;
@@ -6,6 +5,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Leader02.ChatBotApi.Dialogs;
 
@@ -13,17 +13,17 @@ public class RepeatQuestionDialog : CancelAndHelpDialog
 {
     private readonly IRequirementService _requirementService;
     private readonly ILegalActService _legalActService;
-    private readonly IDepartmentService _departmentService;
+    private readonly ISubDepartmentService _subDepartmentService;
     private readonly ILogger _logger;
 
-    public RepeatQuestionDialog(ConsultationDialog consultationDialog, ILogger<RepeatQuestionDialog> logger, IRequirementService requirementService,
-        ILegalActService legalActService, IDepartmentService departmentService)
+    public RepeatQuestionDialog(ConsultationDialog consultationDialog, ILogger<RepeatQuestionDialog> logger,
+        IRequirementService requirementService, ILegalActService legalActService, ISubDepartmentService subDepartmentService)
         : base(nameof(RepeatQuestionDialog))
     {
         _logger = logger;
         _requirementService = requirementService;
         _legalActService = legalActService;
-        _departmentService = departmentService;
+        _subDepartmentService = subDepartmentService;
 
         AddDialog(new TextPrompt(nameof(TextPrompt)));
         AddDialog(consultationDialog);
@@ -57,11 +57,13 @@ public class RepeatQuestionDialog : CancelAndHelpDialog
                                     userMessage.ToLower().Contains("нужн")))
         {
             var requirement = await _requirementService.FindManyByBasicRequirement(userMessage, cancellationToken);
+            if (requirement != null)
+            {
+                await stepContext.Context.SendActivityAsync(
+                    MessageFactory.Text(JsonConvert.SerializeObject(requirement), inputHint: InputHints.IgnoringInput), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(
-                MessageFactory.Text(JsonSerializer.Serialize(requirement), inputHint: InputHints.IgnoringInput), cancellationToken);
-
-            return await stepContext.ReplaceDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+                return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+            }
         }
 
         //ищем в нпа
@@ -71,23 +73,28 @@ public class RepeatQuestionDialog : CancelAndHelpDialog
                                     userMessage.ToLower().Contains("закон")))
         {
             var legalAct = await _legalActService.FindByName(userMessage, cancellationToken);
+            if (legalAct != null)
+            {
+                var a = JsonConvert.SerializeObject(legalAct);
+                await stepContext.Context.SendActivityAsync(
+                    MessageFactory.Text(a, inputHint: InputHints.IgnoringInput), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(
-                MessageFactory.Text(JsonSerializer.Serialize(legalAct), inputHint: InputHints.IgnoringInput), cancellationToken);
-
-            return await stepContext.ReplaceDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+                return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+            }
         }
 
         //ищем в органах власти
         if (userMessage != null && ((userMessage.ToLower().Contains("орган") && userMessage.ToLower().Contains("власт")) ||
                                     userMessage.ToLower().Contains("какой департамент")))
         {
-            var department = await _departmentService.FindByAbbreviationOrNameOrDescription(userMessage, cancellationToken);
+            var subDepartment = await _subDepartmentService.FindByNameOrDescription(userMessage, cancellationToken);
+            if (subDepartment != null)
+            {
+                await stepContext.Context.SendActivityAsync(
+                    MessageFactory.Text(JsonConvert.SerializeObject(subDepartment), inputHint: InputHints.IgnoringInput), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(
-                MessageFactory.Text(JsonSerializer.Serialize(department), inputHint: InputHints.IgnoringInput), cancellationToken);
-
-            return await stepContext.ReplaceDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+                return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+            }
         }
 
         await stepContext.Context.SendActivityAsync(

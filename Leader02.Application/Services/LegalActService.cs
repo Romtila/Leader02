@@ -2,6 +2,7 @@ using Leader.Domain.Interfaces;
 using Leader02.Application.DtoModels;
 using Leader02.Application.IServices;
 using Leader02.Application.Mappers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Leader02.Application.Services;
 
@@ -10,10 +11,10 @@ public class LegalActService : ILegalActService
     private readonly ILegalActTsVectorRepository _legalActTsVectorRepository;
     private readonly ILegalActRepository _legalActRepository;
 
-    public LegalActService(ILegalActTsVectorRepository legalActTsVectorRepository, ILegalActRepository legalActRepository)
+    public LegalActService(IServiceScopeFactory serviceScopeFactory)
     {
-        _legalActTsVectorRepository = legalActTsVectorRepository;
-        _legalActRepository = legalActRepository;
+        _legalActTsVectorRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ILegalActTsVectorRepository>();
+        _legalActRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ILegalActRepository>();
     }
 
     

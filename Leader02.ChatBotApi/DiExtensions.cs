@@ -9,7 +9,7 @@ namespace Leader02.ChatBotApi;
 
 public static class DiExtensions
 {
-    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    public static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IRequirementRepository, RequirementRepository>();
         services.AddScoped<IRequirementTsVectorRepository, RequirementTsVectorRepository>();
@@ -17,26 +17,21 @@ public static class DiExtensions
         services.AddScoped<ILegalActTsVectorRepository, LegalActTsVectorRepository>();
         services.AddScoped<ISubDepartmentRepository, SubDepartmentRepository>();
         services.AddScoped<ISubDepartmentTsVectorRepository, SubDepartmentTsVectorRepository>();
-
-        return services;
     }
 
-    public static IServiceCollection AddServices(this IServiceCollection services)
+    public static void AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IRequirementService, RequirementService>();
         services.AddSingleton<ILegalActService, LegalActService>();
         services.AddSingleton<IDepartmentService, DepartmentService>();
-
-        return services;
+        services.AddSingleton<ISubDepartmentService, SubDepartmentService>();
     }
 
-    public static IServiceCollection AddDialogs(this IServiceCollection services)
+    public static void AddDialogs(this IServiceCollection services)
     {
         services.AddSingleton<ConsultationDialog>();
         services.AddSingleton<FeedBackDialog>();
         services.AddSingleton<RepeatQuestionDialog>();
         services.AddSingleton<MainDialog>();
-
-        return services;
     }
 }

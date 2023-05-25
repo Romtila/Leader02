@@ -2,6 +2,7 @@ using Leader.Domain.Interfaces;
 using Leader02.Application.DtoModels;
 using Leader02.Application.IServices;
 using Leader02.Application.Mappers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Leader02.Application.Services;
 
@@ -10,10 +11,10 @@ public class RequirementService : IRequirementService
     private readonly IRequirementRepository _requirementRepository;
     private readonly IRequirementTsVectorRepository _requirementTsVectorRepository;
 
-    public RequirementService(IRequirementRepository requirementRepository, IRequirementTsVectorRepository requirementTsVectorRepository)
+    public RequirementService(IServiceScopeFactory serviceScopeFactory)
     {
-        _requirementRepository = requirementRepository;
-        _requirementTsVectorRepository = requirementTsVectorRepository;
+        _requirementRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IRequirementRepository>();
+        _requirementTsVectorRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IRequirementTsVectorRepository>();
     }
 
     public Task<List<RequirementDto>> FindManyBySubDepartment(int id, CancellationToken ct)

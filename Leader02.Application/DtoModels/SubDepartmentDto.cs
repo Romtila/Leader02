@@ -6,5 +6,5 @@ public class SubDepartmentDto
     public string Name { get; set; } = string.Empty;
     public string? SubDepartmentUrl { get; set; }
     public string? SubDepartmentDescription { get; set; }
-    public int DepartmentId { get; set; }
+    public DepartmentDto? Department { get; set; }
 }

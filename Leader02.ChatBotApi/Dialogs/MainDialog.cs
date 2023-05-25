@@ -3,7 +3,6 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.18.1
 
-using System.Text.Json;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
@@ -11,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using Leader02.Application.IServices;
+using Newtonsoft.Json;
 
 namespace Leader02.ChatBotApi.Dialogs;
 
@@ -22,8 +22,9 @@ public class MainDialog : ComponentDialog
     private readonly ILogger _logger;
 
     // Dependency injection uses this constructor to instantiate MainDialog
-    public MainDialog(FeedBackDialog feedBackDialog, ConsultationDialog consultationDialog, RepeatQuestionDialog repeatQuestionDialog,
-        ILogger<MainDialog> logger, IRequirementService requirementService, ILegalActService legalActService, ISubDepartmentService subDepartmentService)
+    public MainDialog(FeedBackDialog feedBackDialog,
+        ConsultationDialog consultationDialog, RepeatQuestionDialog repeatQuestionDialog, ILogger<MainDialog> logger,
+        IRequirementService requirementService, ILegalActService legalActService, ISubDepartmentService subDepartmentService)
         : base(nameof(MainDialog))
     {
         _logger = logger;
@@ -63,24 +64,28 @@ public class MainDialog : ComponentDialog
                                     userMessage.ToLower().Contains("треб") ||
                                     userMessage.ToLower().Contains("нужн")))
         {
-            var searchResult = await _requirementService.FindManyByBasicRequirement(userMessage, cancellationToken);
+            var requirement = await _requirementService.FindManyByBasicRequirement(userMessage, cancellationToken);
+            if (requirement != null)
+            {
+                await stepContext.Context.SendActivityAsync(
+                    MessageFactory.Text(JsonConvert.SerializeObject(requirement), inputHint: InputHints.IgnoringInput), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(
-                MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
-
-            return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+                return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+            }
         }
 
         //ищем в органах власти
         if (userMessage != null && ((userMessage.ToLower().Contains("орган") && userMessage.ToLower().Contains("власт")) ||
                                     userMessage.ToLower().Contains("какой департамент")))
         {
-            var searchResult = await _subDepartmentService.FindByNameOrDescription(userMessage, cancellationToken);
+            var subDepartment = await _subDepartmentService.FindByNameOrDescription(userMessage, cancellationToken);
+            if (subDepartment != null)
+            {
+                await stepContext.Context.SendActivityAsync(
+                    MessageFactory.Text(JsonConvert.SerializeObject(subDepartment), inputHint: InputHints.IgnoringInput), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(
-                MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
-
-            return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+                return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+            }
         }
 
         //ищем в нпа
@@ -89,12 +94,14 @@ public class MainDialog : ComponentDialog
                                     (userMessage.ToLower().Contains("норм") && userMessage.ToLower().Contains("права")) ||
                                     userMessage.ToLower().Contains("закон")))
         {
-            var searchResult = await _legalActService.FindByName(userMessage, cancellationToken);
+            var legalAct = await _legalActService.FindByName(userMessage, cancellationToken);
+            if (legalAct != null)
+            {
+                await stepContext.Context.SendActivityAsync(
+                    MessageFactory.Text(JsonConvert.SerializeObject(legalAct), inputHint: InputHints.IgnoringInput), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(
-                MessageFactory.Text(JsonSerializer.Serialize(searchResult), inputHint: InputHints.IgnoringInput), cancellationToken);
-
-            return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+                return await stepContext.BeginDialogAsync(nameof(FeedBackDialog), null, cancellationToken);
+            }
         }
 
         await stepContext.Context.SendActivityAsync(

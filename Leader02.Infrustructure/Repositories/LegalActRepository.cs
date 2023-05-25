@@ -12,7 +12,10 @@ public class LegalActRepository : BaseRepository<LegalAct>, ILegalActRepository
 
     public async Task<LegalAct?> GetById(int id, CancellationToken ct)
     {
-        return await DbContext.LegalActs.FirstOrDefaultAsync(x => x.Id == id, cancellationToken: ct);
+        return await DbContext.LegalActs.Where(x => x.Id == id)
+            .Include(x => x.SubDepartment)
+            .Include(x => x.Department)
+            .FirstOrDefaultAsync(cancellationToken: ct);
     }
 
     public Task<List<LegalAct>> FindBySubDepartmentId(int id, CancellationToken ct)
