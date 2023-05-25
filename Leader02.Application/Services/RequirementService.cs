@@ -27,6 +27,25 @@ public class RequirementService : IRequirementService
         throw new NotImplementedException();
     }
 
+    public async Task<RequirementDto?> FindByBasicRequirement(string searchString, CancellationToken ct)
+    {
+        var requirementTsVectors = await _requirementTsVectorRepository.FindManyByBasicRequirementDetail(searchString, ct);
+
+        if (requirementTsVectors.Count > 0)
+        {
+            requirementTsVectors = requirementTsVectors.Where(x => x.Number == requirementTsVectors[0].Number).ToList();
+
+            var requirementIds = requirementTsVectors.Select(x => x.Id).ToArray();
+
+            var requirements = await _requirementRepository.GetManyByIds(requirementIds, ct);
+
+            var requirementFull = new RequirementFullDto();
+            //заполняем requirementFull
+        }
+
+        return null;
+    }
+
     public async Task<List<RequirementDto>?> FindManyByBasicRequirement(string searchString, CancellationToken ct)
     {
         var requirementTsVectors = await _requirementTsVectorRepository.FindManyByBasicRequirementDetail(searchString, ct);
@@ -34,7 +53,7 @@ public class RequirementService : IRequirementService
         var requirementIds = requirementTsVectors.Select(x => x.Id).ToArray();
 
         var requirements = await _requirementRepository.GetManyByIds(requirementIds, ct);
-        
+
         if (requirements.Count > 0)
         {
             return requirements.RequirementToRequirementDto();

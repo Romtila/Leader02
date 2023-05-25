@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Leader02.Infrastructure.Migrations
 {
     [DbContext(typeof(Leader02Context))]
-    [Migration("20230524141227_Initial")]
+    [Migration("20230525052536_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -363,82 +363,28 @@ namespace Leader02.Infrastructure.Migrations
                     b.Property<string>("BasicRequirementDetail")
                         .HasColumnType("text");
 
-                    b.Property<string>("BusinessQuestionContentForProfilingForClarifyingQuestion")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BusinessQuestionContentForProfilingForGeneralQuestion")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CharacteristicForClarifyingQuestion")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CharacteristicForGeneralQuestion")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ClarificationOfTypeOdActivity")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ConfirmingComplianceDocuments")
-                        .HasColumnType("text");
-
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("EmpoweredToHoldAuthority")
-                        .HasColumnType("text");
-
-                    b.Property<string>("IndicationOfNpa")
-                        .HasColumnType("text");
 
                     b.Property<int>("Number")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Ogv")
+                    b.Property<string>("RequirementNpasJson")
                         .HasColumnType("text");
 
-                    b.Property<string>("PossibilityOfDocumentsObtaining")
+                    b.Property<string>("RequirementProfilingJson")
                         .HasColumnType("text");
 
-                    b.Property<string>("ReferenceToLegalAct")
+                    b.Property<string>("RequirementResponsibilitiesJson")
                         .HasColumnType("text");
 
                     b.Property<int?>("RequirementType")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ResponsibilityBringingProcedure")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Sanction")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SizeOfSanction")
+                    b.Property<string>("RequirementVerificationMethodsJson")
                         .HasColumnType("text");
 
                     b.Property<int?>("SubDepartmentId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SubjectOfResponsibility")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SupportingDocumentsValidity")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TypeOfLiability")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TypeOfNorm")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TypesOfActivitiesOfSubjects")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ValidityPeriodOfLegalAct")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ValidityPeriodOfRequirement")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("VerificationMethod")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

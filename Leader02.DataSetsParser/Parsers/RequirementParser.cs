@@ -71,7 +71,8 @@ public class RequirementParser
         //var requirements = new List<Requirement>(worksheet.Dimension.Rows);
         var requirements = new List<Requirement>(worksheet.Dimension.Rows);
 
-        var number = _context.Requirements.OrderByDescending(x => x.Id).FirstOrDefault()?.Number ?? 0;//номер требования
+        #region инициализация всех переменных для ОТ
+        var number = _context.Requirements.OrderByDescending(x => x.Id).FirstOrDefault()?.Number + 1 ?? 1;//номер требования
         var basicRequirementDescription = "";//Описание базового требования (группы ОТ)	
             var basicRequirementDetail = "";//Детализация базового требования	
             var requirementType = RequirementType.Object;
@@ -101,7 +102,8 @@ public class RequirementParser
             var businessQuestionContentForProfilingForGeneralQuestion = "";//Содержание вопроса бизнесу для профилирования (для общего вопроса)	
             var characteristicForClarifyingQuestion = "";//Характеристика (для уточняющего вопроса)	
             var businessQuestionContentForProfilingForClarifyingQuestion = "";//Содержание вопроса бизнесу для профилирования (для уточняющего вопроса)
-             
+            #endregion 
+            
         for (var i = 3; i <= worksheet.Dimension.Rows; i++)
         {
             if (worksheet.Cells[i, 3].Value != null && worksheet.Cells[i, 3].Value.ToString() != "")
@@ -145,6 +147,30 @@ public class RequirementParser
                 requirementType = worksheet.Cells[i, 5].Value.ToString() == "1"
                     ? RequirementType.Subject
                     : RequirementType.Object;
+                
+                indicationOfNpa = "";
+                validityPeriodOfLegalAct = "";
+                validityPeriodOfRequirement = "";
+                verificationMethod = VerificationMethod.Mock;
+                confirmingComplianceDocuments = "";
+                ogv = "";
+                possibilityOfDocumentsObtaining = "";
+                supportingDocumentsValidity = "";
+                typeOfLiability = "";
+                subjectOfResponsibility = "";
+                sanction = "";
+                sizeOfSanction = "";
+                typeOfNorm = "";
+                referenceToLegalAct = "";
+                empoweredToHoldAuthority = "";
+                responsibilityBringingProcedure = "";
+                typesOfActivitiesOfSubjects = "";
+                clarificationOfTypeOdActivity = "";
+                characteristicForGeneralQuestion = "";
+                businessQuestionContentForProfilingForGeneralQuestion = "";
+                characteristicForClarifyingQuestion = "";
+                businessQuestionContentForProfilingForClarifyingQuestion = "";
+                
             }
 
             if (worksheet.Cells[i, 6].Value != null && worksheet.Cells[i, 6].Value.ToString() != "")
@@ -177,6 +203,25 @@ public class RequirementParser
                     , "8" => VerificationMethod.Other
                     , _ => verificationMethod
                 };
+                
+                confirmingComplianceDocuments = "";
+                ogv = "";
+                possibilityOfDocumentsObtaining = "";
+                supportingDocumentsValidity = "";
+                typeOfLiability = "";
+                subjectOfResponsibility = "";
+                sanction = "";
+                sizeOfSanction = "";
+                typeOfNorm = "";
+                referenceToLegalAct = "";
+                empoweredToHoldAuthority = "";
+                responsibilityBringingProcedure = "";
+                typesOfActivitiesOfSubjects = "";
+                clarificationOfTypeOdActivity = "";
+                characteristicForGeneralQuestion = "";
+                businessQuestionContentForProfilingForGeneralQuestion = "";
+                characteristicForClarifyingQuestion = "";
+                businessQuestionContentForProfilingForClarifyingQuestion = "";
             }
 
             if (worksheet.Cells[i, 10].Value != null && worksheet.Cells[i, 10].Value.ToString() != "")
