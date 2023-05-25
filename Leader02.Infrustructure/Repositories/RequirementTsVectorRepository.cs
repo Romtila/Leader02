@@ -10,13 +10,13 @@ public class RequirementTsVectorRepository : BaseRepository<RequirementTsVector>
     {
     }
 
-    public async Task<RequirementTsVector?> FindByBasicRequirementDetail(string basicRequirementDetail, CancellationToken ct)
+    public async Task<RequirementTsVector?> FindByBasicRequirement(string basicRequirementDetail, CancellationToken ct)
     {
         var query = $"""            
             SELECT "Id", "Number", "BasicRequirement"
             FROM "RequirementTsVectors"
             WHERE "ts" @@ plainto_tsquery('{basicRequirementDetail}')
-            ORDER BY ts_rank("ts", plainto_tsquery('{basicRequirementDetail}')) desc;
+            ORDER BY ts_rank("ts", plainto_tsquery('{basicRequirementDetail}')) desc
             """;
 
         return await DbContext.RequirementTsVectors
@@ -24,13 +24,13 @@ public class RequirementTsVectorRepository : BaseRepository<RequirementTsVector>
             .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<List<RequirementTsVector>> FindManyByBasicRequirementDetail(string basicRequirementDetail, CancellationToken ct)
+    public async Task<List<RequirementTsVector>> FindManyByBasicRequirement(string basicRequirementDetail, CancellationToken ct)
     {
         var query = $"""            
             SELECT "Id", "Number", "BasicRequirement"
             FROM "RequirementTsVectors"
             WHERE "ts" @@ plainto_tsquery('{basicRequirementDetail}')
-            ORDER BY ts_rank("ts", plainto_tsquery('{basicRequirementDetail}')) desc;
+            ORDER BY ts_rank("ts", plainto_tsquery('{basicRequirementDetail}')) desc
             """;
 
         return await DbContext.RequirementTsVectors

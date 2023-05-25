@@ -64,7 +64,7 @@ public class MainDialog : ComponentDialog
                                     userMessage.ToLower().Contains("треб") ||
                                     userMessage.ToLower().Contains("нужн")))
         {
-            var requirement = await _requirementService.FindManyByBasicRequirement(userMessage, cancellationToken);
+            var requirement = await _requirementService.FindByBasicRequirement(userMessage, cancellationToken);
             if (requirement != null)
             {
                 await stepContext.Context.SendActivityAsync(

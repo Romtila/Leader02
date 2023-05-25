@@ -18,19 +18,23 @@ optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=Leader02;Username=po
 var leader02Context = new Leader02Context(optionsBuilder.Options);
 
 //парсинг департаментов и контрольных органов
-var departmentParser = new DepartmentParser(leader02Context);
-departmentParser.DepartmentParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_2_Слоты_для_записи_на_Консультирование.xlsx");
+//var departmentParser = new DepartmentParser(leader02Context);
+//departmentParser.DepartmentParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_2_Слоты_для_записи_на_Консультирование.xlsx");
 
 //парсинг НПА
-var legalActParser = new LegalActParser(leader02Context);
-legalActParser.LegalActParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_3_Перечень_нормативных_правовых_актов.xlsx");
+//var legalActParser = new LegalActParser(leader02Context);
+//legalActParser.LegalActParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_3_Перечень_нормативных_правовых_актов.xlsx");
 
 //парсинг сервисов Открытый Контроль
-var openControlServiceParser = new OpenControlServiceParser(leader02Context);
-openControlServiceParser.OpenControlServiceParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_4_Перечень_сервисов_ГИС_Открытый_контроль.xlsx");
+//var openControlServiceParser = new OpenControlServiceParser(leader02Context);
+//openControlServiceParser.OpenControlServiceParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_4_Перечень_сервисов_ГИС_Открытый_контроль.xlsx");
 
 //парсинг требований
-var requirementParser = new RequirementParser(leader02Context);
-requirementParser.RequirementParsing();
+//var requirementParser = new RequirementParser(leader02Context);
+//requirementParser.RequirementParsing();
+
+//парсинг слотов
+var consultationSlotParser = new ConsultationSlotParser(leader02Context);
+consultationSlotParser.ConsultationSlotParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_2_Слоты_для_записи_на_Консультирование.xlsx");
 
 Console.WriteLine($"The answer is always {connectionString}");

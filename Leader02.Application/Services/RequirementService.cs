@@ -29,18 +29,13 @@ public class RequirementService : IRequirementService
 
     public async Task<RequirementDto?> FindByBasicRequirement(string searchString, CancellationToken ct)
     {
-        var requirementTsVectors = await _requirementTsVectorRepository.FindManyByBasicRequirementDetail(searchString, ct);
+        var requirementTsVector = await _requirementTsVectorRepository.FindByBasicRequirement(searchString, ct);
 
-        if (requirementTsVectors.Count > 0)
+        if (requirementTsVector != null)
         {
-            requirementTsVectors = requirementTsVectors.Where(x => x.Number == requirementTsVectors[0].Number).ToList();
+            var requirement = await _requirementRepository.GetById(requirementTsVector.Id, ct);
 
-            var requirementIds = requirementTsVectors.Select(x => x.Id).ToArray();
-
-            var requirements = await _requirementRepository.GetManyByIds(requirementIds, ct);
-
-            var requirementFull = new RequirementFullDto();
-            //заполняем requirementFull
+            return requirement.RequirementToRequirementDto();
         }
 
         return null;
@@ -48,14 +43,17 @@ public class RequirementService : IRequirementService
 
     public async Task<List<RequirementDto>?> FindManyByBasicRequirement(string searchString, CancellationToken ct)
     {
-        var requirementTsVectors = await _requirementTsVectorRepository.FindManyByBasicRequirementDetail(searchString, ct);
+        var requirementTsVectors = await _requirementTsVectorRepository.FindManyByBasicRequirement(searchString, ct);
 
-        var requirementIds = requirementTsVectors.Select(x => x.Id).ToArray();
-
-        var requirements = await _requirementRepository.GetManyByIds(requirementIds, ct);
-
-        if (requirements.Count > 0)
+        if (requirementTsVectors.Count > 0)
         {
+            var requirementIds = requirementTsVectors
+                .Where(x => x.Number == requirementTsVectors[0].Number)
+                .Select(x => x.Id)
+                .ToArray();
+
+            var requirements = await _requirementRepository.GetManyByIds(requirementIds, ct);
+
             return requirements.RequirementToRequirementDto();
         }
 

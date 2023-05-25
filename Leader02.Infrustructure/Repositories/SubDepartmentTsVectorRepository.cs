@@ -16,7 +16,7 @@ public class SubDepartmentTsVectorRepository : BaseRepository<SubDepartmentTsVec
             SELECT "Id", "Description"
             FROM "SubDepartmentTsVectors"
             WHERE "ts" @@ plainto_tsquery('{name}')
-            ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc;
+            ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc
             """;
 
         return await DbContext.SubDepartmentTsVectors
@@ -30,7 +30,7 @@ public class SubDepartmentTsVectorRepository : BaseRepository<SubDepartmentTsVec
             SELECT "Id", "Description"
             FROM "SubDepartmentTsVectors"
             WHERE "ts" @@ plainto_tsquery('{name}')
-            ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc;
+            ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc
             """;
 
         return await DbContext.SubDepartmentTsVectors

@@ -16,7 +16,7 @@ public class LegalActTsVectorRepository : BaseRepository<LegalActTsVector>, ILeg
             SELECT "Id", "Name"
             FROM "LegalActTsVectors"
             WHERE "ts" @@ plainto_tsquery('{name}')
-            ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc;
+            ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc
             """;
 
         return await DbContext.LegalActTsVectors
@@ -30,7 +30,7 @@ public class LegalActTsVectorRepository : BaseRepository<LegalActTsVector>, ILeg
             SELECT "Id", "Name"
             FROM "LegalActTsVectors"
             WHERE "ts" @@ plainto_tsquery('{name}')
-            ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc;
+            ORDER BY ts_rank("ts", plainto_tsquery('{name}')) desc
             """;
 
         return await DbContext.LegalActTsVectors
