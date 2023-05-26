@@ -15,6 +15,6 @@ public class Consultation
     public long? DepartmentUserId { get; set; }
     public DepartmentUser? DepartmentUser { get; set; }
 
-    public int? ConsultationSlotId { get; set; }
+    public Guid? ConsultationSlotId { get; set; }
     public ConsultationSlot? ConsultationSlot { get; set; }
 }

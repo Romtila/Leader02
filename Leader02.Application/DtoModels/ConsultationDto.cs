@@ -10,6 +10,6 @@ public class ConsultationDto
     public string? OtherInformation { get; set; }
 
     public long UserId { get; set; }
-    public long DepartmentUserId { get; set; }
-    public int ConsultationSlotId { get; set; }
+    public long? DepartmentUserId { get; set; }
+    public Guid ConsultationSlotId { get; set; }
 }

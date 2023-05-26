@@ -4,5 +4,5 @@ namespace Leader02.Application.IServices;
 
 public interface IDepartmentService
 {
-    Task<DepartmentDto> FindByAbbreviationOrNameOrDescription(string searchString, CancellationToken ct);
+    Task<List<DepartmentDto>> GetAll(CancellationToken ct);
 }

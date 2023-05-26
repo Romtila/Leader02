@@ -1,4 +1,5 @@
 using Leader.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Leader02.Infrastructure.Repositories;
 
@@ -11,10 +12,16 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         DbContext = dbContext;
     }
 
-    public async Task AddAsync(T entity, CancellationToken ct)
+    public async Task<List<T>> GetAll(CancellationToken ct)
+    {
+        return await DbContext.Set<T>().ToListAsync(ct);
+    }
+
+    public async Task<T> AddAsync(T entity, CancellationToken ct)
     {
         await DbContext.Set<T>().AddAsync(entity, ct);
         await DbContext.SaveChangesAsync(ct);
+        return entity;
     }
 
     public async Task AddManyAsync(IEnumerable<T> entity, CancellationToken ct)
@@ -23,10 +30,11 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         await DbContext.SaveChangesAsync(ct);
     }
 
-    public async Task UpdateAsync(T entity, CancellationToken ct)
+    public async Task<T> UpdateAsync(T entity, CancellationToken ct)
     {
         DbContext.Set<T>().Update(entity);
         await DbContext.SaveChangesAsync(ct);
+        return entity;
     }
 
     public async Task RemoveAsync(T entity, CancellationToken ct)

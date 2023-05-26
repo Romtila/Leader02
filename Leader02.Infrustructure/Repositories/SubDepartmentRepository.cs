@@ -18,9 +18,9 @@ public class SubDepartmentRepository : BaseRepository<SubDepartment>, ISubDepart
             .FirstOrDefaultAsync(cancellationToken: ct);
     }
 
-    public Task<List<SubDepartment>> GetByDepartmentId(int id, CancellationToken ct)
+    public async Task<List<SubDepartment>> GetAllByDepartmentId(int departmentId, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        return await DbContext.SubDepartments.Where(x => x.DepartmentId == departmentId).ToListAsync(ct);
     }
 
     public Task<List<(int, string)>> GetAllName(string name, CancellationToken ct)

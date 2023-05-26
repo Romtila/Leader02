@@ -30,4 +30,10 @@ public class SubDepartmentService : ISubDepartmentService
 
         return null;
     }
+
+    public async Task<List<SubDepartmentDto>> GetAllByDepartmentId(int id, CancellationToken ct)
+    {
+        var subDepartments = await _subDepartmentRepository.GetAllByDepartmentId(id, ct);
+        return subDepartments.SubDepartmentToSubDepartmentDto();
+    }
 }

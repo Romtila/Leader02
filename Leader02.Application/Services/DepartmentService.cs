@@ -1,6 +1,7 @@
 using Leader.Domain.Interfaces;
 using Leader02.Application.DtoModels;
 using Leader02.Application.IServices;
+using Leader02.Application.Mappers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Leader02.Application.Services;
@@ -14,14 +15,9 @@ public class DepartmentService : IDepartmentService
         _departmentRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IDepartmentRepository>();
     }
 
-
-    public Task<DepartmentDto> FindByAbbreviationOrNameOrDescription(string searchString, CancellationToken ct)
+    public async Task<List<DepartmentDto>> GetAll(CancellationToken ct)
     {
-        if ((searchString.ToLower().Contains("орган") && searchString.ToLower().Contains("власт")) ||
-                                     searchString.ToLower().Contains("какой департамент"))
-        {
-            
-        }
-        throw new NotImplementedException();
+        var departments = await _departmentRepository.GetAll(ct);
+        return departments.DepartmentToDepartmentDto();
     }
 }

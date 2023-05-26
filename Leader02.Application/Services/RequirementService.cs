@@ -35,7 +35,7 @@ public class RequirementService : IRequirementService
         {
             var requirement = await _requirementRepository.GetById(requirementTsVector.Id, ct);
 
-            return requirement.RequirementToRequirementDto();
+            if (requirement != null) return requirement.RequirementToRequirementDto();
         }
 
         return null;
