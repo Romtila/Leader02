@@ -1,4 +1,4 @@
-namespace Leader02.Application.RequestModels.Auth;
+namespace Leader02.Api.Models.Requests.Auth;
 
 public class UserLoginRequest
 {

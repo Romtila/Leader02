@@ -1,4 +1,4 @@
-namespace Leader02.Application.RequestModels.Consultation;
+namespace Leader02.Api.Models.Requests.Consultation;
 
 public class GetConsultationsRequest
 {

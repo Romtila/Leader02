@@ -1,3 +1,4 @@
+using Leader02.Api;
 using Leader02.Api.Configs;
 using Leader02.Application.Jwt;
 using Leader02.Infrastructure;
@@ -12,6 +13,9 @@ builder.Services.AddDbContext<Leader02Context>(options =>
     options.UseNpgsql(configuration.GetConnectionString("Leader02")));
 
 builder.Services.AddSingleton<IJwtConfig>(JwtConfig.Create(configuration));
+
+builder.Services.AddRepositories();
+builder.Services.AddServices();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

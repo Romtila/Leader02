@@ -1,6 +1,6 @@
 using Leader02.Application.DtoModels;
 
-namespace Leader02.Application.ResponseModels.ConsultationSlot;
+namespace Leader02.Api.Models.Response.ConsultationSlot;
 
 public class GetSlotsResponse
 {

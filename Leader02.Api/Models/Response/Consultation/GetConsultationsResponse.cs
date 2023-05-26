@@ -1,6 +1,6 @@
 using Leader02.Application.DtoModels;
 
-namespace Leader02.Application.ResponseModels.Consultation;
+namespace Leader02.Api.Models.Response.Consultation;
 
 public class GetConsultationsResponse
 {

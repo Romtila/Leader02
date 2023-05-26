@@ -1,6 +1,6 @@
 using Leader02.Application.DtoModels;
 
-namespace Leader02.Application.ResponseModels.ChatBotRequest;
+namespace Leader02.Api.Models.Response.ChatBotRequest;
 
 public class GetChatBotRequestResponse
 {

@@ -1,10 +1,11 @@
 using System.Security.Cryptography;
 using System.Text;
+using Leader.Domain.Entity;
 using Leader.Domain.Interfaces;
+using Leader02.Application.DtoModels;
 using Leader02.Application.IServices;
 using Leader02.Application.Jwt;
-using Leader02.Application.RequestModels.Auth;
-using Leader02.Application.ResponseModels.Auth;
+using Leader02.Application.Mappers;
 
 namespace Leader02.Application.Services;
 
@@ -22,21 +23,21 @@ public class AuthService : IAuthService
     }
 
     [Obsolete("Obsolete")]
-    public async Task<AuthenticationUserResponse?> Authenticate(UserLoginRequest model, CancellationToken ct)
+    public async Task<AuthenticationUserDto?> Authenticate(string email, string password, int userType, CancellationToken ct)
     {
-        if (model.UserType == 0)
+        if (userType == 0)
         {
-            var user = await _userRepository.GetByEmailAndPassword(model.Email, Encrypt(model.Password), ct);
+            var user = await _userRepository.GetByEmailAndPassword(email, Encrypt(password), ct);
             if (user == null)
-                return new AuthenticationUserResponse
+                return new AuthenticationUserDto
                 {
                     IsAuthenticated = false,
-                    Message = $"No Accounts Registered with {model.Email}."
+                    Message = $"No Accounts Registered with {email}."
                 };
             
             var userToken = _jwtUtils.GenerateUserJwtToken(user);
 
-            return new AuthenticationUserResponse
+            return new AuthenticationUserDto
             {
                 Email = user.Email,
                 Role = "User",
@@ -46,17 +47,17 @@ public class AuthService : IAuthService
             };
         }
 
-        var departmentUser = await _departmentUserRepository.GetByEmailAndPassword(model.Email, Encrypt(model.Password), ct);
+        var departmentUser = await _departmentUserRepository.GetByEmailAndPassword(email, Encrypt(password), ct);
         if (departmentUser == null)
-            return new AuthenticationUserResponse
+            return new AuthenticationUserDto
             {
                 IsAuthenticated = false,
-                Message = $"No Accounts Registered with {model.Email}."
+                Message = $"No Accounts Registered with {email}."
             };
             
         var departmentUserToken = _jwtUtils.GenerateDepartmentUserJwtToken(departmentUser);
 
-        return new AuthenticationUserResponse
+        return new AuthenticationUserDto
         {
             Email = departmentUser.Email,
             Role = "DepartmentUser",
@@ -65,7 +66,33 @@ public class AuthService : IAuthService
             Message = "Get token"
         };
     }
-    
+
+    [Obsolete("Obsolete")]
+    public async Task<UserDto?> Register(string firstName, string lastName, string? middleName, string email, string mobilePhone, string password, 
+        string repeatPassword, string? ditSecurityQuestion, string? ditSecurityAnswer, CancellationToken ct)
+    {
+        if (password != repeatPassword)
+            return null;
+        
+        var checkUser = await _userRepository.GetByEmail(email, ct);
+        if (checkUser != null)
+            return null;
+
+        var user = await _userRepository.AddAsync(new User
+        {
+            Email = email,
+            FirstName = firstName,
+            LastName = lastName,
+            MiddleName = middleName,
+            Password = Encrypt(password),
+            MobilePhone = mobilePhone,
+            DitSecurityQuestion = ditSecurityQuestion,
+            DitSecurityAnswer = ditSecurityAnswer,
+        }, ct);
+        
+        return user.UserToUserDto();
+    }
+
 
     [Obsolete("Obsolete")]
     private string Encrypt(string str)

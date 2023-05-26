@@ -1,4 +1,4 @@
-namespace Leader02.Application.ResponseModels.Auth;
+namespace Leader02.Api.Models.Response.Auth;
 
 public class AuthenticationUserResponse
 {

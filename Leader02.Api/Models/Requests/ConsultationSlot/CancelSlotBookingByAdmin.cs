@@ -1,4 +1,4 @@
-namespace Leader02.Application.RequestModels.ConsultationSlot;
+namespace Leader02.Api.Models.Requests.ConsultationSlot;
 
 public class CancelSlotBookingByAdmin
 {

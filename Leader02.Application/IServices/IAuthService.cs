@@ -1,9 +1,10 @@
-using Leader02.Application.RequestModels.Auth;
-using Leader02.Application.ResponseModels.Auth;
+using Leader02.Application.DtoModels;
 
 namespace Leader02.Application.IServices;
 
 public interface IAuthService
 {
-    Task<AuthenticationUserResponse?> Authenticate(UserLoginRequest model, CancellationToken ct);
+    Task<AuthenticationUserDto?> Authenticate(string email, string password, int userType, CancellationToken ct);
+    Task<UserDto?> Register(string firstName, string lastName, string? middleName, string email, string mobilePhone, string password, string repeatPassword,
+        string? ditSecurityQuestion, string? ditSecurityAnswer, CancellationToken ct);
 }

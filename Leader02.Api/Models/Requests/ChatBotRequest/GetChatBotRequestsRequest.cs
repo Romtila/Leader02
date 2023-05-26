@@ -1,4 +1,4 @@
-namespace Leader02.Application.RequestModels.ChatBotRequest;
+namespace Leader02.Api.Models.Requests.ChatBotRequest;
 
 public class GetChatBotRequestsRequest
 {
