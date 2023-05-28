@@ -18,7 +18,7 @@ public class ConsultationTopicService : IConsultationTopicService
     public async Task<List<ConsultationTopicDto>?> GetAllBySubDepartmentId(int subDepartmentId, CancellationToken ct)
     {
         var consultationTopics = await _consultationTopicRepository.GetBySubDepartmentId(subDepartmentId, ct);
-        if (consultationTopics.Count > 0)
+        if (consultationTopics.Count == 0)
             return null;
 
         return consultationTopics.ConsultationTopicsToConsultationTopicsDto();
