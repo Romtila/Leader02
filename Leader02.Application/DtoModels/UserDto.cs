@@ -17,5 +17,4 @@ public class UserDto
     public int? Okveds { get; set; }
     public string? DitSecurityQuestion { get; set; }
     public string? DitSecurityAnswer { get; set; }
-    public string Password { get; set; } = string.Empty;
 }

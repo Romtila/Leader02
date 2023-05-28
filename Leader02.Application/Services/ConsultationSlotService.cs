@@ -3,6 +3,7 @@ using Leader.Domain.Interfaces;
 using Leader02.Application.DtoModels;
 using Leader02.Application.IServices;
 using Leader02.Application.Mappers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Leader02.Application.Services;
 
@@ -10,9 +11,9 @@ public class ConsultationSlotService : IConsultationSlotService
 {
     private readonly IConsultationSlotRepository _consultationSlotRepository;
 
-    public ConsultationSlotService(IConsultationSlotRepository consultationSlotRepository)
+    public ConsultationSlotService(IServiceScopeFactory serviceScopeFactory)
     {
-        _consultationSlotRepository = consultationSlotRepository;
+        _consultationSlotRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IConsultationSlotRepository>();
     }
 
     public async Task<List<ConsultationSlotDto>> GetAllBySubDepartmentId(int subDepartmentId, CancellationToken ct)

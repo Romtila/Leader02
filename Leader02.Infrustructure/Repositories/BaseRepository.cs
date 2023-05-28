@@ -17,11 +17,11 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return await DbContext.Set<T>().ToListAsync(ct);
     }
 
-    public async Task<T> AddAsync(T entity, CancellationToken ct)
+    public async Task<bool> AddAsync(T entity, CancellationToken ct)
     {
         await DbContext.Set<T>().AddAsync(entity, ct);
-        await DbContext.SaveChangesAsync(ct);
-        return entity;
+        var saved = await DbContext.SaveChangesAsync(ct);
+        return saved > 0;
     }
 
     public async Task AddManyAsync(IEnumerable<T> entity, CancellationToken ct)

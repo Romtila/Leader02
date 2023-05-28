@@ -4,7 +4,7 @@ namespace Leader02.Api.Configs;
 
 public class JwtConfig : IJwtConfig
 {
-    public string SecretJwtKet { get; set; } = string.Empty;
+    public string SecretJwtKet { get; set; } = "IT CAN BE ANY STRING";
     
     public static JwtConfig Create(IConfigurationRoot configurationRoot)
     {

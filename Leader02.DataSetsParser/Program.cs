@@ -34,7 +34,11 @@ var leader02Context = new Leader02Context(optionsBuilder.Options);
 //requirementParser.RequirementParsing();
 
 //парсинг слотов
-var consultationSlotParser = new ConsultationSlotParser(leader02Context);
-consultationSlotParser.ConsultationSlotParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_2_Слоты_для_записи_на_Консультирование.xlsx");
+//var consultationSlotParser = new ConsultationSlotParser(leader02Context);
+//consultationSlotParser.ConsultationSlotParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_2_Слоты_для_записи_на_Консультирование.xlsx");
+
+//парсинг тем консультаций
+//var consultationTopicParser = new ConsultationTopicParser(leader02Context);
+//consultationTopicParser.ConsultationTopicParsing("C:\\Users\\Romtila\\Desktop\\Датасеты\\Приложение_5_темы_консультирования.xlsx");
 
 Console.WriteLine($"The answer is always {connectionString}");

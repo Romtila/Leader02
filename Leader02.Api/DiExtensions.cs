@@ -1,5 +1,6 @@
 using Leader.Domain.Interfaces;
 using Leader02.Application.IServices;
+using Leader02.Application.Jwt;
 using Leader02.Application.Services;
 using Leader02.Infrastructure.Repositories;
 
@@ -29,6 +30,7 @@ public static class DiExtensions
 
     public static void AddServices(this IServiceCollection services)
     {
+        services.AddSingleton<IJwtUtils, JwtUtils>();
         services.AddSingleton<IAuthService, AuthService>();
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IAdminUserService, AdminUserService>();

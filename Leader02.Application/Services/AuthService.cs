@@ -6,6 +6,7 @@ using Leader02.Application.DtoModels;
 using Leader02.Application.IServices;
 using Leader02.Application.Jwt;
 using Leader02.Application.Mappers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Leader02.Application.Services;
 
@@ -14,15 +15,15 @@ public class AuthService : IAuthService
     private readonly IJwtUtils _jwtUtils;
     private readonly IUserRepository _userRepository;
     private readonly IDepartmentUserRepository _departmentUserRepository;
+    private const string SecurityKey = "ComplexKeyHere_12121";
 
-    public AuthService(IUserRepository userRepository, IDepartmentUserRepository departmentUserRepository, IJwtUtils jwtUtils)
+    public AuthService(IServiceScopeFactory serviceScopeFactory, IJwtUtils jwtUtils)
     {
-        _userRepository = userRepository;
-        _departmentUserRepository = departmentUserRepository;
+        _userRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IUserRepository>();
+        _departmentUserRepository = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IDepartmentUserRepository>();
         _jwtUtils = jwtUtils;
     }
 
-    [Obsolete("Obsolete")]
     public async Task<AuthenticationUserDto?> Authenticate(string email, string password, int userType, CancellationToken ct)
     {
         if (userType == 0)
@@ -67,7 +68,6 @@ public class AuthService : IAuthService
         };
     }
 
-    [Obsolete("Obsolete")]
     public async Task<UserDto?> Register(string firstName, string lastName, string? middleName, string email, string mobilePhone, string password, 
         string repeatPassword, string? ditSecurityQuestion, string? ditSecurityAnswer, CancellationToken ct)
     {
@@ -78,52 +78,82 @@ public class AuthService : IAuthService
         if (checkUser != null)
             return null;
 
-        var user = await _userRepository.AddAsync(new User
+        var newUser = new User
         {
-            Email = email,
-            FirstName = firstName,
-            LastName = lastName,
-            MiddleName = middleName,
-            Password = Encrypt(password),
-            MobilePhone = mobilePhone,
-            DitSecurityQuestion = ditSecurityQuestion,
+            Email = email, 
+            FirstName = firstName, 
+            LastName = lastName, 
+            MiddleName = middleName, 
+            Password = Encrypt(password), 
+            MobilePhone = mobilePhone, 
+            DitSecurityQuestion = ditSecurityQuestion, 
             DitSecurityAnswer = ditSecurityAnswer,
-        }, ct);
+        };
         
-        return user.UserToUserDto();
+        var isSaved = await _userRepository.AddAsync(newUser, ct);
+
+        if (isSaved)
+        {
+            var user = await _userRepository.GetByEmail(email, ct);
+            return user?.UserToUserDto();
+        }
+
+        return null;
     }
 
 
-    [Obsolete("Obsolete")]
-    private string Encrypt(string str)
-    {
-        var EncrptKey = "";
-        byte[] iv = {18, 52, 86, 120, 144, 171, 205, 239};
-        var byKey = Encoding.UTF8.GetBytes(EncrptKey[..8]);
-        var des = new DESCryptoServiceProvider();
-        var inputByteArray = Encoding.UTF8.GetBytes(str);
-        var ms = new MemoryStream();
-        var cs = new CryptoStream(ms, des.CreateEncryptor(byKey, iv), CryptoStreamMode.Write);
-        cs.Write(inputByteArray, 0, inputByteArray.Length);
-        cs.FlushFinalBlock();
-        return Convert.ToBase64String(ms.ToArray());
-    }
+        //This method is used to convert the plain text to Encrypted/Un-Readable Text format.
+        private string Encrypt(string PlainText)
+        {
+            // Getting the bytes of Input String.
+            byte[] toEncryptedArray = UTF8Encoding.UTF8.GetBytes(PlainText);
 
-    [Obsolete("Obsolete")]
-    private string Decrypt(string str)
-    {
-        str = str.Replace(" ", "+");
-        var DecryptKey = "2013;[pnuLIT)WebCodeExpert";
-        byte[] iv = {18, 52, 86, 120, 144, 171, 205, 239};
+            MD5CryptoServiceProvider objMD5CryptoService = new MD5CryptoServiceProvider();
+            //Gettting the bytes from the Security Key and Passing it to compute the Corresponding Hash Value.
+            byte[] securityKeyArray = objMD5CryptoService.ComputeHash(UTF8Encoding.UTF8.GetBytes(SecurityKey));
+            //De-allocatinng the memory after doing the Job.
+            objMD5CryptoService.Clear();
 
-        var byKey = Encoding.UTF8.GetBytes(DecryptKey.Substring(0, 8));
-        var des = new DESCryptoServiceProvider();
-        var inputByteArray = Convert.FromBase64String(str.Replace(" ", "+"));
-        var ms = new MemoryStream();
-        var cs = new CryptoStream(ms, des.CreateDecryptor(byKey, iv), CryptoStreamMode.Write);
-        cs.Write(inputByteArray, 0, inputByteArray.Length);
-        cs.FlushFinalBlock();
-        var encoding = Encoding.UTF8;
-        return encoding.GetString(ms.ToArray());
-    }
+            var objTripleDESCryptoService = new TripleDESCryptoServiceProvider();
+            //Assigning the Security key to the TripleDES Service Provider.
+            objTripleDESCryptoService.Key = securityKeyArray;
+            //Mode of the Crypto service is Electronic Code Book.
+            objTripleDESCryptoService.Mode = CipherMode.ECB;
+            //Padding Mode is PKCS7 if there is any extra byte is added.
+            objTripleDESCryptoService.Padding = PaddingMode.PKCS7;
+
+
+            var objCrytpoTransform = objTripleDESCryptoService.CreateEncryptor();
+            //Transform the bytes array to resultArray
+            byte[] resultArray = objCrytpoTransform.TransformFinalBlock(toEncryptedArray, 0, toEncryptedArray.Length);
+            objTripleDESCryptoService.Clear();
+            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+        }
+
+        //This method is used to convert the Encrypted/Un-Readable Text back to readable  format.
+        public static string Decrypt(string CipherText)
+        {
+            byte[] toEncryptArray = Convert.FromBase64String(CipherText);
+            MD5CryptoServiceProvider objMD5CryptoService = new MD5CryptoServiceProvider();
+
+            //Gettting the bytes from the Security Key and Passing it to compute the Corresponding Hash Value.
+            byte[] securityKeyArray = objMD5CryptoService.ComputeHash(UTF8Encoding.UTF8.GetBytes(SecurityKey));
+            objMD5CryptoService.Clear();
+
+            var objTripleDESCryptoService = new TripleDESCryptoServiceProvider();
+            //Assigning the Security key to the TripleDES Service Provider.
+            objTripleDESCryptoService.Key = securityKeyArray;
+            //Mode of the Crypto service is Electronic Code Book.
+            objTripleDESCryptoService.Mode = CipherMode.ECB;
+            //Padding Mode is PKCS7 if there is any extra byte is added.
+            objTripleDESCryptoService.Padding = PaddingMode.PKCS7;
+
+            var objCrytpoTransform = objTripleDESCryptoService.CreateDecryptor();
+            //Transform the bytes array to resultArray
+            byte[] resultArray = objCrytpoTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+            objTripleDESCryptoService.Clear();
+
+            //Convert and return the decrypted data/byte into string format.
+            return UTF8Encoding.UTF8.GetString(resultArray);
+        }
 }

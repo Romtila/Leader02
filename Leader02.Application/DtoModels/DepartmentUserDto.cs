@@ -9,6 +9,5 @@ public class DepartmentUserDto
     public string Email { get; set; } = string.Empty;
     public string? MobilePhone { get; set; }
     public string? StationaryPhone { get; set; }
-    public string Password { get; set; } = string.Empty;
     public SubDepartmentDto? SubDepartment { get; set; } = new();
 }
